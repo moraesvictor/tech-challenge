@@ -7,15 +7,15 @@ export const Button = ({
 }: ButtonProps) => {
   const mapButtonColors: Record<BUTTON_VARIANTS, string> = {
     alert: "bg-red-600 text-white hover:bg-red-700",
-    default: "bg-blue-600 text-white hover:bg-blue-700",
+    default: "bg-cyan-600 text-white hover:bg-cyan-800",
     ghost:
-      "bg-white text-black border border-gray-300 hover:bg-gray-100 hover:border-gray-400",
+      "bg-white text-black border border-gray-300 hover:bg-gray-200 hover:border-gray-400",
   };
 
   return (
     <button
       className={clsx(
-        "rounded-xl h-[48px] px-4 font-semibold transition-colors cursor-pointer",
+        "rounded-xl h-[48px] px-4 font-semibold transition-colors cursor-pointer cyan",
         mapButtonColors[variant]
       )}
       {...props}
