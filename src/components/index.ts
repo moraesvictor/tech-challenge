@@ -1,1 +1,1 @@
-export { BUTTON_VARIANTS, Button } from "./button";
+export { BUTTON_VARIANTS, Button } from "./ui";
