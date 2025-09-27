@@ -15,7 +15,7 @@ export const Button = ({
   return (
     <button
       className={clsx(
-        "rounded-xl h-[48px] px-4 font-medium transition-colors cursor-pointer",
+        "rounded-xl h-[48px] px-4 font-semibold transition-colors cursor-pointer",
         mapButtonColors[variant]
       )}
       {...props}
