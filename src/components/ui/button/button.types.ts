@@ -8,4 +8,4 @@ export enum BUTTON_VARIANTS {
 
 export type ButtonProps = {
   variant?: BUTTON_VARIANTS
-} & ButtonHTMLAttributes<HTMLButtonElement>
+} & ButtonHTMLAttributes<HTMLButtonElement> & { fullWidth?: boolean }
