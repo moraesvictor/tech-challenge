@@ -1,1 +1,2 @@
-export { Input } from './input'
+export { Input } from "./input";
+export { Checkbox } from "./checkbox";
