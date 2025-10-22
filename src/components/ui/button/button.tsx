@@ -17,13 +17,11 @@ export const Button = ({
     <button
       className={clsx(
         "rounded-xl h-[48px] px-4 font-semibold transition-colors cursor-pointer cyan",
-<<<<<<< Updated upstream
-        mapButtonColors[variant]
-=======
         mapButtonColors[variant],
         fullWidth ? "w-full" : "w-fit",
-        "disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed"
->>>>>>> Stashed changes
+        "disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed",
+        mapButtonColors[variant],
+        props.fullWidth ? "w-full" : "w-fit"
       )}
       {...props}
     >
