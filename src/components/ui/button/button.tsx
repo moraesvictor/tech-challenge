@@ -16,7 +16,8 @@ export const Button = ({
     <button
       className={clsx(
         "rounded-xl h-[48px] px-4 font-semibold transition-colors cursor-pointer cyan",
-        mapButtonColors[variant]
+        mapButtonColors[variant],
+        props.fullWidth ? "w-full" : "w-fit"
       )}
       {...props}
     >

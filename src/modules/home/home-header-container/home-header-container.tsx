@@ -1,4 +1,4 @@
-import { Button, BUTTON_VARIANTS } from "@/components";
+import { HomeHeaderButtons } from "./components/home-header-buttons/home-header-buttons";
 
 export const HomeHeaderContainer = () => {
   return (
@@ -13,10 +13,7 @@ export const HomeHeaderContainer = () => {
             Serviços
           </span>
         </div>
-        <div className="flex gap-5">
-          <Button>Abrir minha conta</Button>
-          <Button variant={BUTTON_VARIANTS.ghost}>Já tenho conta</Button>
-        </div>
+        <HomeHeaderButtons />
       </div>
     </div>
   );
