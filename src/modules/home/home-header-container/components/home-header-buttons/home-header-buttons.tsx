@@ -2,6 +2,7 @@
 import { Button, BUTTON_VARIANTS } from "@/components";
 import { useModal } from "@/components/ui/modal/hooks/use-modal-context";
 import { OpenAccountForm } from "../open-account-form/open-account-form";
+import { LoginForm } from "../login-form/login-form";
 
 export const HomeHeaderButtons = () => {
   const { open, close } = useModal();
@@ -11,15 +12,23 @@ export const HomeHeaderButtons = () => {
         onClick={() =>
           open({
             title: "Abrir minha conta",
-            content: (
-              <OpenAccountForm onClose={close} onSubmit={() => void 0} />
-            ),
+            content: <OpenAccountForm onClose={close} />,
           })
         }
       >
         Abrir minha conta
       </Button>
-      <Button variant={BUTTON_VARIANTS.ghost}>Já tenho conta</Button>
+      <Button
+        variant={BUTTON_VARIANTS.ghost}
+        onClick={() =>
+          open({
+            title: "Acessar conta",
+            content: <LoginForm onClose={close} />,
+          })
+        }
+      >
+        Já tenho conta
+      </Button>
     </div>
   );
 };

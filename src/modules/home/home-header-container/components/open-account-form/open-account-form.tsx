@@ -1,26 +1,10 @@
-"use client";
-import { useState } from "react";
-import { Button, BUTTON_VARIANTS, Input } from "@/components";
+import { Input, Button, BUTTON_VARIANTS } from "@/components";
 import { Checkbox } from "@/components/ui/input";
+import { useSignupForm } from "./hook/open-account-form";
 
-type OpenAccountFormProps = {
-  onClose: () => void;
-  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-};
-
-export const OpenAccountForm = ({
-  onClose,
-  onSubmit,
-}: OpenAccountFormProps) => {
-  const [acceptedTerms, setAcceptedTerms] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!acceptedTerms) {
-      return;
-    }
-    onSubmit(e);
-  };
+export const OpenAccountForm = ({ onClose }: { onClose: () => void }) => {
+  const { acceptedTerms, setAcceptedTerms, msg, handleSubmit } =
+    useSignupForm();
 
   return (
     <form
@@ -28,27 +12,33 @@ export const OpenAccountForm = ({
       onSubmit={handleSubmit}
     >
       <Input
+        name="name"
         type="text"
         placeholder="Digite seu nome..."
         label="Nome"
         required
       />
       <Input
+        name="email"
         type="email"
         placeholder="Digite seu email..."
         label="Email"
         required
+        pattern="\S+@\S+\.\S+"
+        autoComplete="username"
       />
       <Input
+        name="password"
         type="password"
         placeholder="Digite sua senha..."
         label="Senha"
         required
+        autoComplete="new-password"
       />
 
       <div className="flex items-start">
         <Checkbox
-          label="Li e estou ciente quanto às condições de tratamento dos meus dados conforme descrito na Política de Privacidade do banco."
+          label="Li e estou ciente quanto às condições de tratamento dos meus dados..."
           checked={acceptedTerms}
           onChange={setAcceptedTerms}
         />
@@ -67,6 +57,8 @@ export const OpenAccountForm = ({
           Criar Conta
         </Button>
       </div>
+
+      {msg && <p className="text-red-500 mt-2">{msg}</p>}
     </form>
   );
 };
