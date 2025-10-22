@@ -3,6 +3,7 @@ import { BUTTON_VARIANTS, ButtonProps } from "./button.types";
 
 export const Button = ({
   variant = BUTTON_VARIANTS.default,
+  fullWidth = false,
   ...props
 }: ButtonProps) => {
   const mapButtonColors: Record<BUTTON_VARIANTS, string> = {
@@ -16,7 +17,13 @@ export const Button = ({
     <button
       className={clsx(
         "rounded-xl h-[48px] px-4 font-semibold transition-colors cursor-pointer cyan",
+<<<<<<< Updated upstream
         mapButtonColors[variant]
+=======
+        mapButtonColors[variant],
+        fullWidth ? "w-full" : "w-fit",
+        "disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed"
+>>>>>>> Stashed changes
       )}
       {...props}
     >
