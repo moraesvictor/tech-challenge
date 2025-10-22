@@ -1,5 +1,5 @@
-import { Button, BUTTON_VARIANTS } from "@/components";
 import { HomeHeaderButtons } from "./components/home-header-buttons/home-header-buttons";
+import Image from "next/image";
 
 export const HomeHeaderContainer = () => {
   return (
