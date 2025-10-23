@@ -1,17 +1,12 @@
-// ToastContainer.tsx
 import clsx from "clsx";
-import { ToastContainerProps } from "./toast.types";
+import { ToastContainerProps, ToastPosition } from "./toast.types";
 import { useMemo } from "react";
 
 export const ToastContainer = ({
   position = "bottom-right",
   children,
 }: ToastContainerProps) => {
-  const positions = useMemo<
-    Record<
-      Exclude<ToastContainerProps["position"], undefined>,
-      string
-    >
+  const positions = useMemo<Record<ToastPosition, string>
   >(
     () => ({
       "bottom-right": "bottom-4 right-4 items-end",
