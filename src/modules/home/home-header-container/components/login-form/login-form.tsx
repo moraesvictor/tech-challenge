@@ -2,6 +2,7 @@
 import { Button, BUTTON_VARIANTS, Input } from "@/components";
 import { useLogin } from "./hook/use-login";
 import { redirect } from "next/navigation";
+import { useToastMethods } from "@/components/ui/toast/hooks/use-toast-methods";
 
 type LoginFormProps = {
   onClose: () => void;
@@ -9,6 +10,7 @@ type LoginFormProps = {
 
 export const LoginForm = ({ onClose }: LoginFormProps) => {
   const { login, error, loading } = useLogin();
+  const toast =useToastMethods()
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -19,6 +21,8 @@ export const LoginForm = ({ onClose }: LoginFormProps) => {
 
     const user = await login(email, password);
     if (user) {
+      onClose();
+      toast.success("Login realizado com sucesso!");
       redirect("/dashboard");
     }
   };

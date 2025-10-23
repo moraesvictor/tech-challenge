@@ -4,7 +4,7 @@ import { useSignupForm } from "./hook/open-account-form";
 
 export const OpenAccountForm = ({ onClose }: { onClose: () => void }) => {
   const { acceptedTerms, setAcceptedTerms, msg, handleSubmit } =
-    useSignupForm();
+    useSignupForm(onClose);
 
   return (
     <form
