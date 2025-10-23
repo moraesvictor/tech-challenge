@@ -1,10 +1,12 @@
+import { useToastMethods } from "@/components/ui/toast/hooks/use-toast-methods";
 import { useAuthIndexedDB } from "@/lib/indexedDb/useAuthIndexedDb";
 import { useState } from "react";
 
-export const useSignupForm = () => {
+export const useSignupForm = (onClose: () => void) => {
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [msg, setMsg] = useState("");
   const { ready, addUser } = useAuthIndexedDB();
+  const toast = useToastMethods();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -24,22 +26,22 @@ export const useSignupForm = () => {
     const email = formData.get("email")?.toString() ?? "";
     const password = formData.get("password")?.toString() ?? "";
 
-    const emailNormalized = email.toLowerCase().trim()
+    const emailNormalized = email.toLowerCase().trim();
 
-  try {
-    await addUser({ username: name, email: emailNormalized, password });
-    setMsg("Conta criada com sucesso!");
-    e.currentTarget?.reset();
-    setAcceptedTerms(false);
-  } catch (err: unknown) {
-    if (err instanceof DOMException && err.name === "ConstraintError") {
-      setMsg("Email já cadastrado!");
-    } else {
-      setMsg("Erro ao criar conta");
-      console.error(err);
+    try {
+      await addUser({ username: name, email: emailNormalized, password });
+      toast.success("Conta criada com sucesso!", "bottom-right");
+      e.currentTarget?.reset();
+      onClose();
+    } catch (err: unknown) {
+      if (err instanceof DOMException && err.name === "ConstraintError") {
+        toast.error("Email já cadastrado", "top-center");
+      } else {
+        toast.error("Erro ao criar conta", "top-center");
+        console.error(err);
+      }
     }
-  }
-};
+  };
 
   return {
     acceptedTerms,
