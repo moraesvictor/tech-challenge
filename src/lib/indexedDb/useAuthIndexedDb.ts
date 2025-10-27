@@ -1,4 +1,3 @@
-// useAuthIndexedDB.ts
 import { useEffect, useRef, useState } from "react";
 
 export type UserRecord = {
@@ -9,10 +8,13 @@ export type UserRecord = {
   createdAt: string;
 };
 
+const CURRENT_USER_KEY = "auth-current-user";
+
 export function useAuthIndexedDB() {
   const dbRef = useRef<IDBDatabase | null>(null);
   const [ready, setReady] = useState(false);
   const [error, setError] = useState<Error | null>(null);
+  const [currentUser, setCurrentUser] = useState<UserRecord | null>(null);
 
   useEffect(() => {
     const openReq = indexedDB.open("auth-db", 1);
@@ -44,6 +46,12 @@ export function useAuthIndexedDB() {
       }
     };
   }, []);
+
+  useEffect(() => {
+    if (!ready) return;
+    const saved = localStorage.getItem(CURRENT_USER_KEY);
+    if (saved) setCurrentUser(JSON.parse(saved));
+  }, [ready]);
 
   const withStore = <T>(
     mode: IDBTransactionMode,
@@ -111,7 +119,21 @@ export function useAuthIndexedDB() {
     const user = await getUserByEmail(email);
     if (!user) return { valid: false, user: undefined };
     const hash = await hashString(password);
-    return { valid: hash === user.passwordHash, user: user };
+    return { valid: hash === user.passwordHash, user };
+  };
+
+  const login = async (email: string, password: string) => {
+    const { valid, user } = await validateCredentials(email, password);
+    if (valid && user) {
+      setCurrentUser(user);
+      localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
+    }
+    return { valid, user };
+  };
+
+  const logout = () => {
+    setCurrentUser(null);
+    localStorage.removeItem(CURRENT_USER_KEY);
   };
 
   const getAllUsers = async () => {
@@ -125,11 +147,13 @@ export function useAuthIndexedDB() {
   return {
     ready,
     error,
+    currentUser,
     addUser,
     getUserByEmail,
     validateCredentials,
     getAllUsers,
     clear,
-    _hash: hashString,
+    login,
+    logout,
   };
 }

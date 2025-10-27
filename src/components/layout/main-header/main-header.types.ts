@@ -8,5 +8,5 @@ export type MainHeaderProps = {
 
 export enum HEADER_COLORS {
   dark = "dark",
-  light = "ligth",
+  light = "light",
 }

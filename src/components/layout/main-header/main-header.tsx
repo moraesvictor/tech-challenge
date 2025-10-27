@@ -8,7 +8,7 @@ export const MainHeader = ({
 }: MainHeaderProps) => {
   const bgColors: Record<HEADER_COLORS, string> = {
     [HEADER_COLORS.dark]: "bg-gray-900",
-    [HEADER_COLORS.light]: "bg-gray-200",
+    [HEADER_COLORS.light]: "bg-cyan-900",
   };
 
   const selectedColor = bgColors[color];
@@ -16,7 +16,7 @@ export const MainHeader = ({
   return (
     <header
       className={clsx(
-        "w-full bg-gray-200 py-4 flex items-center",
+        "w-full py-4 flex items-center",
         className,
         selectedColor
       )}

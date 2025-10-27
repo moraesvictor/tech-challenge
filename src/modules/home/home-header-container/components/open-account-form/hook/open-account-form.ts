@@ -1,11 +1,11 @@
 import { useToastMethods } from "@/components/ui/toast/hooks/use-toast-methods";
-import { useAuthIndexedDB } from "@/lib/indexedDb/useAuthIndexedDb";
+import { useAuth } from "@/lib/indexedDb/auth-context";
 import { useState } from "react";
 
 export const useSignupForm = (onClose: () => void) => {
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [msg, setMsg] = useState("");
-  const { ready, addUser } = useAuthIndexedDB();
+  const { ready, addUser } = useAuth();
   const toast = useToastMethods();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

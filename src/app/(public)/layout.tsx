@@ -1,5 +1,3 @@
-// Layout.tsx
-
 import { MainHeader } from "@/components/layout/main-header/main-header";
 import { HEADER_COLORS } from "@/components/layout/main-header/main-header.types";
 import { Footer } from "@/modules/home/components/footer/footer";
