@@ -2,13 +2,12 @@
 import { useAuth } from "@/lib/indexedDb/auth-context";
 import Image from "next/image";
 import { PrivateHeaderSkeleton } from "./private-header-skeleton";
+import { Button } from "@/components";
 
 export const PrivateHeader = () => {
   const { currentUser, ready } = useAuth();
 
   if (!ready) return <PrivateHeaderSkeleton />;
-
-  console.log("Current User:", currentUser);
 
   return (
     <div className="w-full">
@@ -23,8 +22,9 @@ export const PrivateHeader = () => {
           />
         </div>
         {currentUser && (
-          <div className="text-white font-medium">
-            Olá, {currentUser.username}
+          <div className="text-white font-medium flex  gap-5 items-center">
+             Área de {currentUser.username} 
+             <Button style={{ height: '2rem'}}>Sair</Button>
           </div>
         )}
       </div>

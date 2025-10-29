@@ -21,7 +21,8 @@ export const Button = ({
         fullWidth ? "w-full" : "w-fit",
         "disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed",
         mapButtonColors[variant],
-        fullWidth ? "w-full" : "w-fit"
+        fullWidth ? "w-full" : "w-fit",
+        props.className
       )}
       {...props}
     >
