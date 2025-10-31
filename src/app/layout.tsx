@@ -4,6 +4,7 @@ import "./globals.css";
 import { ModalProvider } from "@/components/ui/modal/hooks/use-modal-context";
 import { ToastProvider } from "@/components/ui/toast/hooks/use-toast-context";
 import { AuthProvider } from "@/lib/indexedDb/auth-context";
+import { TransactionsProvider } from "@/lib/transactions/transactions-context";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,9 +33,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AuthProvider>
-          <ToastProvider>
-            <ModalProvider>{children}</ModalProvider>
-          </ToastProvider>
+          <TransactionsProvider>
+            <ToastProvider>
+              <ModalProvider>{children}</ModalProvider>
+            </ToastProvider>
+          </TransactionsProvider>
         </AuthProvider>
       </body>
     </html>
