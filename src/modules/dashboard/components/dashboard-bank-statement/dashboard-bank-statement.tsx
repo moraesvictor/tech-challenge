@@ -7,7 +7,6 @@ export const DashboardBankStatement = () => {
   return (
     <CardBase size="l" colorSchema="light" className="w-full">
       <div className="flex flex-col gap-4">
-        {/* Cabeçalho */}
         <div className="flex justify-between items-center">
           <h2 className="text-lg font-semibold text-gray-900">
             Extrato bancário
@@ -15,7 +14,6 @@ export const DashboardBankStatement = () => {
           <span className="text-sm text-gray-500">Últimos lançamentos</span>
         </div>
 
-        {/* Lista de transações */}
         <div className="flex flex-col divide-y divide-gray-300">
           {transactions.map((tx) => (
             <div key={tx.id} className="flex justify-between items-center py-2">
