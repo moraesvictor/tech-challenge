@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import clsx from "clsx";
 
 type PrivateHeaderNavMenuProps = {
   onLinkClick?: () => void;
@@ -32,9 +33,10 @@ export const PrivateHeaderNavMenu = ({
             key={item.href}
             href={item.href}
             onClick={onLinkClick}
-            className={`text-white hover:text-cyan-200 transition-colors relative pb-1 ${
-              isActive ? "border-b-2 border-white" : ""
-            }`}
+            className={clsx(
+              "text-white hover:text-cyan-200 transition-colors relative pb-1",
+              isActive && "text-cyan-600 border-b-2 border-cyan-600"
+            )}
           >
             {item.label}
           </Link>

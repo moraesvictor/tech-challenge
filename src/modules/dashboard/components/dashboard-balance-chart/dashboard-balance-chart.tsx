@@ -9,17 +9,23 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from "recharts";
-
-const mockBalanceHistory = [
-  { month: "Mai", balance: 8700 },
-  { month: "Jun", balance: 9600 },
-  { month: "Jul", balance: 11200 },
-  { month: "Ago", balance: 12500 },
-  { month: "Set", balance: 11900 },
-  { month: "Out", balance: 12939 },
-];
+import { useBalanceChart } from "./hooks/use-balance-chart";
 
 export const DashboardBalanceChart = () => {
+  const balanceHistory = useBalanceChart();
+
+  const chartData =
+    balanceHistory.length > 0
+      ? balanceHistory
+      : [
+          { month: "Jan", balance: 0 },
+          { month: "Fev", balance: 0 },
+          { month: "Mar", balance: 0 },
+          { month: "Abr", balance: 0 },
+          { month: "Mai", balance: 0 },
+          { month: "Jun", balance: 0 },
+        ];
+
   return (
     <CardBase size="xl" colorSchema="light" className="w-full">
       <div className="flex flex-col gap-3">
@@ -28,7 +34,7 @@ export const DashboardBalanceChart = () => {
         </h2>
 
         <ResponsiveContainer width="100%" height={250}>
-          <LineChart data={mockBalanceHistory}>
+          <LineChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="month" fontSize="15" fontWeight="bold" />
             <YAxis fontSize="15" fontWeight="bold" />
