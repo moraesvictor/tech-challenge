@@ -4,10 +4,10 @@ import { useModal } from "@/components/ui/modal/hooks/use-modal-context";
 import { OpenAccountForm } from "../open-account-form/open-account-form";
 import { LoginForm } from "../login-form/login-form";
 
-export const HomeHeaderButtons = () => {
+export const HomeHeaderButtons = ({ isVertical = false }: { isVertical?: boolean }) => {
   const { open, close } = useModal();
   return (
-    <div className="flex flex-row gap-5">
+    <div className={`flex ${isVertical ? "flex-col" : "flex-row"} gap-5`}>
       <Button
         onClick={() =>
           open({
