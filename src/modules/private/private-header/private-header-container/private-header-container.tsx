@@ -43,7 +43,6 @@ export const PrivateHeader = () => {
           )}
         </div>
 
-        {/* Botão Hambúrguer - visível apenas em telas pequenas */}
         <button
           onClick={toggleMenu}
           className="md:hidden flex flex-col gap-1.5 p-2 text-white focus:outline-none z-50"
@@ -66,7 +65,6 @@ export const PrivateHeader = () => {
           />
         </button>
 
-        {/* Menu Mobile - visível apenas quando o menu está aberto */}
         <div
           className={`md:hidden fixed top-0 left-0 right-0 bottom-0 bg-cyan-900 z-40 transform transition-transform duration-300 ease-in-out ${
             isMenuOpen ? "translate-x-0" : "translate-x-full"
