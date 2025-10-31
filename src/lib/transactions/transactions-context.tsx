@@ -33,7 +33,6 @@ export const TransactionsProvider = ({
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [isClient, setIsClient] = useState(false);
 
-  // Garante que só gera transações no cliente após hidratação
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -41,19 +40,15 @@ export const TransactionsProvider = ({
   useEffect(() => {
     if (!isClient || !ready) return;
 
-    // Usa o ID do usuário como seed para gerar transações consistentes
     const seed = currentUser?.id || 0;
-    // Usa um número fixo baseado no seed para garantir consistência
-    const count = 15 + (seed % 15); // Entre 15 e 29 transações
+    const count = 15 + (seed % 15);
 
-    // Gera transações com seed determinístico
     const generatedTransactions = createTransactions(count);
     setTransactions(generatedTransactions);
   }, [isClient, ready, currentUser?.id]);
 
   const bankBalance = useMemo(() => {
     if (!isClient || transactions.length === 0) {
-      // Retorna valores padrão durante SSR ou antes de carregar
       return {
         userName: currentUser?.username || "Usuário",
         balance: 10000,
@@ -136,7 +131,6 @@ export const TransactionsProvider = ({
 
   const balanceHistory = useMemo(() => {
     if (!isClient || transactions.length === 0) {
-      // Retorna histórico vazio durante SSR ou antes de carregar
       return [];
     }
 

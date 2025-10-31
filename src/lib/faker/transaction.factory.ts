@@ -32,7 +32,7 @@ const generateTransactionDate = (daysAgo: number): string => {
 };
 
 export const createTransaction = (daysAgo: number): Transaction => {
-  const isCredit = Math.random() > 0.4; // 60% crédito, 40% débito
+  const isCredit = Math.random() > 0.4;
   const type = isCredit ? "credit" : "debit";
   const descriptions = transactionDescriptions[type];
   const description = faker.helpers.arrayElement(descriptions);
@@ -44,7 +44,6 @@ export const createTransaction = (daysAgo: number): Transaction => {
     amount = faker.number.float({ min: 50, max: 3000, fractionDigits: 2 });
   }
 
-  // Adiciona nome aleatório para transferências e compras
   let finalDescription = description;
   if (description.includes("para") || description.includes("em")) {
     finalDescription = `${description} ${faker.person.firstName()}`;
@@ -63,7 +62,6 @@ export const createTransactions = (count: number): Transaction[] => {
   return Array.from({ length: count }, (_, index) =>
     createTransaction(index)
   ).sort((a, b) => {
-    // Ordena por data (mais recentes primeiro)
     const dateA = new Date(a.date.split("/").reverse().join("-"));
     const dateB = new Date(b.date.split("/").reverse().join("-"));
     return dateB.getTime() - dateA.getTime();
