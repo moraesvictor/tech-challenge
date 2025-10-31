@@ -1,1 +1,1 @@
-export { PrivateHeader } from "./private-header/private-header";
+export { PrivateHeader } from "./private-header";
