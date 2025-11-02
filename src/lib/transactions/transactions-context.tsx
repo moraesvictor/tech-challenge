@@ -19,6 +19,8 @@ type TransactionsContextValue = {
   balanceHistory: BalanceHistory[];
   bankBalance: BankBalance;
   addTransaction: (transaction: Transaction) => void;
+  updateTransaction: (id: string, transaction: Transaction) => void;
+  deleteTransaction: (id: string) => void;
 };
 
 const TransactionsContext = createContext<TransactionsContextValue | null>(
@@ -185,11 +187,23 @@ export const TransactionsProvider = ({
     setTransactions((prev) => [...prev, transaction]);
   };
 
+  const updateTransaction = (id: string, updatedTransaction: Transaction) => {
+    setTransactions((prev) =>
+      prev.map((tx) => (tx.id === id ? updatedTransaction : tx))
+    );
+  };
+
+  const deleteTransaction = (id: string) => {
+    setTransactions((prev) => prev.filter((tx) => tx.id !== id));
+  };
+
   const value: TransactionsContextValue = {
     transactions,
     balanceHistory,
     bankBalance,
     addTransaction,
+    updateTransaction,
+    deleteTransaction,
   };
 
   return (

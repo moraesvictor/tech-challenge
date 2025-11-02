@@ -14,6 +14,7 @@ type MenuItem = {
 
 const menuItems: MenuItem[] = [
   { label: "Dashboard", href: "/dashboard" },
+  { label: "Transações", href: "/transacoes" },
   { label: "Transferências", href: "/transferencias" },
   { label: "Investimentos", href: "/investimentos" },
   { label: "Outros serviços", href: "/outros-servicos" },

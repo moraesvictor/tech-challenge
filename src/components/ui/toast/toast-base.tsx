@@ -18,7 +18,7 @@ export const ToastBase = ({ id, message, type, onClose }: ToastProps) => {
   return (
     <div
       className={clsx(
-        "fixed z-50 flex items-center justify-between gap-3 px-4 py-3 rounded-2xl shadow-lg min-w-[260px] text-white animate-fade-in-up",
+        "flex items-center justify-between gap-3 px-4 py-3 rounded-2xl shadow-lg min-w-[260px] text-white animate-fade-in-up",
         colors
       )}
     >
