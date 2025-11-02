@@ -1,3 +1,5 @@
-export default function TransactionPage() {
-  return <div>Conteúdo da página de transações</div>;
+import { TransfersContainer } from "@/modules/transfers/transfers-container";
+
+export default function TransfersPage() {
+  return <TransfersContainer />;
 }

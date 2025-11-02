@@ -1,21 +1,62 @@
 "use client";
 import React, { InputHTMLAttributes } from "react";
 import clsx from "clsx";
+import { useCurrencyMask } from "./hooks/use-currency-mask";
+import { parseCurrency } from "@/lib/utils/currency-mask";
 
 type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   label?: string;
   errorLabel?: string;
+  currency?: boolean;
 };
 
 export const Input: React.FC<InputProps> = ({
   label,
   className,
   errorLabel,
+  currency,
+  value,
+  onChange,
+  onBlur,
   ...props
 }) => {
+  const currencyMask = useCurrencyMask(
+    currency ? (value as string | number | undefined) : undefined
+  );
+
   const handleInvalid = (e: React.FormEvent<HTMLInputElement>) => {
     const input = e.currentTarget;
     input.setCustomValidity(errorLabel || "Campo inválido");
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (currency) {
+      const numericValue = parseCurrency(e.target.value);
+      currencyMask.handleChange(e);
+      if (onChange) {
+        const syntheticEvent = {
+          ...e,
+          target: {
+            ...e.target,
+            value: numericValue.toString(),
+          },
+          currentTarget: {
+            ...e.currentTarget,
+            value: numericValue.toString(),
+          },
+        };
+        onChange(syntheticEvent as React.ChangeEvent<HTMLInputElement>);
+      }
+    } else {
+      onChange?.(e);
+    }
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    if (currency) {
+      currencyMask.handleBlur(e);
+    }
+    onBlur?.(e);
   };
 
   return (
@@ -25,6 +66,9 @@ export const Input: React.FC<InputProps> = ({
       )}
       <input
         {...props}
+        value={currency ? currencyMask.displayValue : value}
+        onChange={handleChange}
+        onBlur={handleBlur}
         onInvalid={handleInvalid}
         onInput={(e: React.FormEvent<HTMLInputElement>) => {
           e.currentTarget.setCustomValidity("");
