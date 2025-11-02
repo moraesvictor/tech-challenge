@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useState, useCallback } from "react";
+import { useMemo, useState } from "react";
 import { TransferForm } from "../../transfer-form/transfer-form";
 import { PixForm } from "../../pix-form/pix-form";
 import { useTransactions } from "@/lib/transactions/transactions-context";
@@ -25,7 +25,6 @@ export const useBankTransferCardController = () => {
   const { addTransaction } = useTransactions();
   const toast = useToastMethods();
 
-  // Estados dos formulários
   const [pixData, setPixData] = useState<PixFormData>({
     keyPix: "",
     value: "",
@@ -43,33 +42,43 @@ export const useBankTransferCardController = () => {
     setType(value as "pix" | "transfer");
   };
 
-  const handlePixKeyChange = useCallback((value: string) => {
-    setPixData((prev) => ({ ...prev, keyPix: value }));
-  }, []);
+  const createFieldHandlers = <T extends object>(
+    setter: React.Dispatch<React.SetStateAction<T>>,
+    fields: Array<keyof T>
+  ) => {
+    const handlers: Record<string, (value: string) => void> = {};
+    fields.forEach((field) => {
+      handlers[String(field)] = (value: string) => {
+        setter((prev) => ({ ...prev, [field]: value }));
+      };
+    });
+    return handlers;
+  };
 
-  const handlePixValueChange = useCallback((value: string) => {
-    setPixData((prev) => ({ ...prev, value }));
-  }, []);
+  const pixHandlers = useMemo(
+    () => createFieldHandlers(setPixData, ["keyPix", "value"]),
+    [setPixData]
+  );
 
-  const handleTransferNameChange = useCallback((value: string) => {
-    setTransferData((prev) => ({ ...prev, name: value }));
-  }, []);
+  const transferHandlers = useMemo(
+    () =>
+      createFieldHandlers(setTransferData, [
+        "name",
+        "account",
+        "bank",
+        "agency",
+        "value",
+      ]),
+    [setTransferData]
+  );
 
-  const handleTransferAccountChange = useCallback((value: string) => {
-    setTransferData((prev) => ({ ...prev, account: value }));
-  }, []);
-
-  const handleTransferBankChange = useCallback((value: string) => {
-    setTransferData((prev) => ({ ...prev, bank: value }));
-  }, []);
-
-  const handleTransferAgencyChange = useCallback((value: string) => {
-    setTransferData((prev) => ({ ...prev, agency: value }));
-  }, []);
-
-  const handleTransferValueChange = useCallback((value: string) => {
-    setTransferData((prev) => ({ ...prev, value }));
-  }, []);
+  const handlePixKeyChange = pixHandlers.keyPix;
+  const handlePixValueChange = pixHandlers.value;
+  const handleTransferNameChange = transferHandlers.name;
+  const handleTransferAccountChange = transferHandlers.account;
+  const handleTransferBankChange = transferHandlers.bank;
+  const handleTransferAgencyChange = transferHandlers.agency;
+  const handleTransferValueChange = transferHandlers.value;
 
   const createTransaction = (): Transaction => {
     const now = new Date();
@@ -99,7 +108,6 @@ export const useBankTransferCardController = () => {
       amountInCents = parseInt(transferData.value) || 0;
     }
 
-    // Converter centavos para reais (negativo porque é débito)
     const amount = -amountInCents / 100;
 
     return {
@@ -118,7 +126,6 @@ export const useBankTransferCardController = () => {
       const transaction = createTransaction();
       addTransaction(transaction);
 
-      // Limpar formulários
       if (type === "pix") {
         setPixData({ keyPix: "", value: "" });
       } else {
@@ -131,7 +138,6 @@ export const useBankTransferCardController = () => {
         });
       }
 
-      // Forçar remontagem dos formulários para limpar os inputs
       setFormKey((prev) => prev + 1);
 
       toast.success("Transação realizada com sucesso!", "bottom-right");
@@ -172,9 +178,7 @@ export const useBankTransferCardController = () => {
   );
 
   const form = useMemo(
-    () => (
-      <div key={formKey}>{mapForm[type as "pix" | "transfer"]}</div>
-    ),
+    () => <div key={formKey}>{mapForm[type as "pix" | "transfer"]}</div>,
     [type, mapForm, formKey]
   );
 
