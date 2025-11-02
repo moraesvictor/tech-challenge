@@ -4,10 +4,15 @@ import Image from "next/image";
 import { PrivateHeaderSkeleton } from "./components/private-header-skeleton";
 import { Button } from "@/components";
 import { PrivateHeaderNavMenu } from "./components/private-header-nav-menu";
+import { LogoutModal } from "./components/logout-modal";
+import { useModal } from "@/components/ui/modal/hooks/use-modal-context";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export const PrivateHeader = () => {
-  const { currentUser, ready } = useAuth();
+  const { currentUser, ready, logout } = useAuth();
+  const { open, close } = useModal();
+  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   if (!ready) return <PrivateHeaderSkeleton />;
@@ -18,6 +23,22 @@ export const PrivateHeader = () => {
 
   const closeMenu = () => {
     setIsMenuOpen(false);
+  };
+
+  const handleLogout = () => {
+    open({
+      title: "Confirmar saída",
+      content: (
+        <LogoutModal
+          onConfirm={() => {
+            logout();
+            close();
+            router.push("/home");
+          }}
+          onCancel={close}
+        />
+      ),
+    });
   };
 
   return (
@@ -38,7 +59,9 @@ export const PrivateHeader = () => {
           {currentUser && (
             <div className="text-white font-medium flex gap-5 items-center">
               Área de {currentUser.username}
-              <Button style={{ height: "2rem" }}>Sair</Button>
+              <Button style={{ height: "2rem" }} onClick={handleLogout}>
+                Sair
+              </Button>
             </div>
           )}
         </div>
@@ -76,7 +99,7 @@ export const PrivateHeader = () => {
               {currentUser && (
                 <div className="text-white font-medium flex flex-col gap-5 pt-5 border-t border-cyan-700">
                   <span>Área de {currentUser.username}</span>
-                  <Button style={{ height: "2rem" }} onClick={closeMenu}>
+                  <Button style={{ height: "2rem" }} onClick={handleLogout}>
                     Sair
                   </Button>
                 </div>

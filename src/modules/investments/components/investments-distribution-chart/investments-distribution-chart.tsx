@@ -1,5 +1,4 @@
 "use client";
-import { useState, useEffect } from "react";
 import { CardBase } from "@/components/ui/card-base/card-base";
 import {
   PieChart,
@@ -10,21 +9,11 @@ import {
   Legend,
 } from "recharts";
 import { useInvestmentsDistribution } from "./hooks/use-investments-distribution";
+import { useMediaQuery } from "@/lib/hooks/use-media-query";
 
 export const InvestmentsDistributionChart = () => {
   const distribution = useInvestmentsDistribution();
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
+  const isMobile = useMediaQuery(`(max-width: 768px)`);
 
   const chartData =
     distribution.length > 0

@@ -5,6 +5,9 @@ import { PixForm } from "../../pix-form/pix-form";
 import { useTransactions } from "@/lib/transactions/transactions-context";
 import { Transaction } from "@/lib/types/transaction.types";
 import { useToastMethods } from "@/components/ui/toast/hooks/use-toast-methods";
+import { generateId } from "@/lib/utils/id-generator";
+import { dateUtils } from "@/lib/utils/date";
+import { ERROR_MESSAGES, SUCCESS_MESSAGES } from "@/lib/constants/messages";
 
 type PixFormData = {
   keyPix: string;
@@ -42,13 +45,13 @@ export const useBankTransferCardController = () => {
     setType(value as "pix" | "transfer");
   };
 
-  const createFieldHandlers = <T extends object>(
+  const createFieldHandlers = <T extends Record<string, string>>(
     setter: React.Dispatch<React.SetStateAction<T>>,
     fields: Array<keyof T>
-  ) => {
-    const handlers: Record<string, (value: string) => void> = {};
+  ): Record<keyof T, (value: string) => void> => {
+    const handlers = {} as Record<keyof T, (value: string) => void>;
     fields.forEach((field) => {
-      handlers[String(field)] = (value: string) => {
+      handlers[field] = (value: string) => {
         setter((prev) => ({ ...prev, [field]: value }));
       };
     });
@@ -81,16 +84,15 @@ export const useBankTransferCardController = () => {
   const handleTransferValueChange = transferHandlers.value;
 
   const createTransaction = (): Transaction => {
-    const now = new Date();
-    const date = now.toLocaleDateString("pt-BR");
-    const id = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    const date = dateUtils.formatBR(new Date());
+    const id = generateId();
 
     let description: string;
     let amountInCents: number;
 
     if (type === "pix") {
       if (!pixData.keyPix.trim() || !pixData.value) {
-        throw new Error("Preencha todos os campos do PIX");
+        throw new Error(ERROR_MESSAGES.FILL_ALL_PIX_FIELDS);
       }
       description = `PIX para ${pixData.keyPix}`;
       amountInCents = parseInt(pixData.value) || 0;
@@ -102,7 +104,7 @@ export const useBankTransferCardController = () => {
         !transferData.agency.trim() ||
         !transferData.value
       ) {
-        throw new Error("Preencha todos os campos da transferência");
+        throw new Error(ERROR_MESSAGES.FILL_ALL_TRANSFER_FIELDS);
       }
       description = `Transferência para ${transferData.name} - ${transferData.bank}`;
       amountInCents = parseInt(transferData.value) || 0;
@@ -140,10 +142,10 @@ export const useBankTransferCardController = () => {
 
       setFormKey((prev) => prev + 1);
 
-      toast.success("Transação realizada com sucesso!", "bottom-right");
+      toast.success(SUCCESS_MESSAGES.TRANSACTION_CREATED, "bottom-right");
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "Erro ao realizar transação";
+        error instanceof Error ? error.message : ERROR_MESSAGES.TRANSACTION_FAILED;
       toast.error(message, "top-center");
     }
   };

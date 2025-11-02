@@ -1,8 +1,9 @@
 "use client";
-import React, { InputHTMLAttributes } from "react";
+import React, { InputHTMLAttributes, useId } from "react";
 import clsx from "clsx";
 import { useCurrencyMask } from "./hooks/use-currency-mask";
 import { parseCurrency } from "@/lib/utils/currency-mask";
+import { ErrorMessage } from "../error-message/error-message";
 
 type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   label?: string;
@@ -20,6 +21,8 @@ export const Input: React.FC<InputProps> = ({
   onBlur,
   ...props
 }) => {
+  const inputId = useId();
+  const errorId = `${inputId}-error`;
   const currencyMask = useCurrencyMask(
     currency ? (value as string | number | undefined) : undefined
   );
@@ -62,10 +65,15 @@ export const Input: React.FC<InputProps> = ({
   return (
     <div className="flex flex-col w-full">
       {label && (
-        <label className="mb-1 font-medium text-gray-700">{label}</label>
+        <label htmlFor={inputId} className="mb-1 font-medium text-gray-700">
+          {label}
+        </label>
       )}
       <input
         {...props}
+        id={inputId}
+        aria-describedby={errorLabel ? errorId : undefined}
+        aria-invalid={!!errorLabel}
         value={currency ? currencyMask.displayValue : value}
         onChange={handleChange}
         onBlur={handleBlur}
@@ -77,9 +85,11 @@ export const Input: React.FC<InputProps> = ({
           "w-full px-4 py-2 border rounded-lg shadow-sm placeholder-gray-400",
           "focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500",
           "disabled:opacity-50 disabled:cursor-not-allowed transition duration-200",
+          errorLabel && "border-red-500",
           className
         )}
       />
+      <ErrorMessage message={errorLabel} id={errorId} />
     </div>
   );
 };

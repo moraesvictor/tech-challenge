@@ -7,6 +7,8 @@ import { Transaction } from "@/lib/types/transaction.types";
 import { useTransactions } from "@/lib/transactions/transactions-context";
 import { useToastMethods } from "@/components/ui/toast/hooks/use-toast-methods";
 import { parseCurrency } from "@/lib/utils/currency-mask";
+import { dateUtils } from "@/lib/utils/date";
+import { ERROR_MESSAGES, SUCCESS_MESSAGES } from "@/lib/constants/messages";
 
 type EditTransactionModalProps = {
   transaction: Transaction;
@@ -26,8 +28,7 @@ export const EditTransactionModal = ({
   );
   const [type, setType] = useState<"credit" | "debit">(transaction.type);
   const [date, setDate] = useState(() => {
-    const [day, month, year] = transaction.date.split("/");
-    return `${year}-${month}-${day}`;
+    return dateUtils.toInputDate(transaction.date);
   });
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -35,12 +36,10 @@ export const EditTransactionModal = ({
 
     try {
       if (!description.trim()) {
-        throw new Error("Descrição é obrigatória");
+        throw new Error(ERROR_MESSAGES.DESCRIPTION_REQUIRED);
       }
 
-      const [year, month, day] = date.split("-");
-      const formattedDate = `${day}/${month}/${year}`;
-
+      const formattedDate = dateUtils.fromInputDate(date);
       const amountValue = amount / 100;
 
       const updatedTransaction: Transaction = {
@@ -52,11 +51,13 @@ export const EditTransactionModal = ({
       };
 
       updateTransaction(transaction.id, updatedTransaction);
-      toast.success("Transação atualizada com sucesso!", "bottom-right");
+      toast.success(SUCCESS_MESSAGES.TRANSACTION_UPDATED, "bottom-right");
       onClose();
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "Erro ao atualizar transação";
+        error instanceof Error
+          ? error.message
+          : ERROR_MESSAGES.TRANSACTION_UPDATE_FAILED;
       toast.error(message, "top-center");
     }
   };

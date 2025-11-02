@@ -1,6 +1,8 @@
 import { useToastMethods } from "@/components/ui/toast/hooks/use-toast-methods";
 import { useAuth } from "@/lib/indexedDb/auth-context";
 import { useState } from "react";
+import { logger } from "@/lib/utils/logger";
+import { ERROR_MESSAGES, SUCCESS_MESSAGES } from "@/lib/constants/messages";
 
 export const useSignupForm = (onClose: () => void) => {
   const [acceptedTerms, setAcceptedTerms] = useState(false);
@@ -17,7 +19,7 @@ export const useSignupForm = (onClose: () => void) => {
     }
 
     if (!ready) {
-      setMsg("DB não está pronto ainda");
+      setMsg(ERROR_MESSAGES.DATABASE_NOT_READY);
       return;
     }
 
@@ -30,15 +32,15 @@ export const useSignupForm = (onClose: () => void) => {
 
     try {
       await addUser({ username: name, email: emailNormalized, password });
-      toast.success("Conta criada com sucesso!", "bottom-right");
+      toast.success(SUCCESS_MESSAGES.ACCOUNT_CREATED, "bottom-right");
       e.currentTarget?.reset();
       onClose();
     } catch (err: unknown) {
       if (err instanceof DOMException && err.name === "ConstraintError") {
-        toast.error("Email já cadastrado", "top-center");
+        toast.error(ERROR_MESSAGES.EMAIL_ALREADY_EXISTS, "top-center");
       } else {
-        toast.error("Erro ao criar conta", "top-center");
-        console.error(err);
+        toast.error(ERROR_MESSAGES.ACCOUNT_CREATION_FAILED, "top-center");
+        logger.error(err, "useSignupForm");
       }
     }
   };
