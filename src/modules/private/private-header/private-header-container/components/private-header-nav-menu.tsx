@@ -26,7 +26,7 @@ export const PrivateHeaderNavMenu = ({
   const pathname = usePathname();
 
   return (
-    <div className="flex flex-col md:flex-row gap-4 md:gap-2 pb-4 md:pb-0 border-b md:border-b-0 border-cyan-700 md:border-0">
+    <nav className="flex flex-col md:flex-row gap-4 md:gap-1 pb-4 md:pb-0 border-b md:border-b-0 border-cyan-700 md:border-0">
       {menuItems.map((item) => {
         const isActive = pathname === item.href;
         return (
@@ -35,14 +35,18 @@ export const PrivateHeaderNavMenu = ({
             href={item.href}
             onClick={onLinkClick}
             className={clsx(
-              "text-white hover:text-cyan-200 transition-colors relative pb-1",
-              isActive && "text-cyan-600 border-b-2 border-cyan-600"
+              "relative text-sm font-medium transition-all duration-200 ease-in-out",
+              "py-2 px-3 md:py-3 md:px-4",
+              "text-white/80 hover:text-white",
+              isActive &&
+                "text-white font-semibold border-b-2 border-cyan-400 pb-[calc(0.75rem-2px)] md:pb-[calc(0.75rem-2px)]",
+              !isActive && "hover:text-white/90"
             )}
           >
             {item.label}
           </Link>
         );
       })}
-    </div>
+    </nav>
   );
 };
