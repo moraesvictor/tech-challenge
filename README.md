@@ -104,7 +104,7 @@ npm --version
 ### 1. Clone o repositório
 
 ```bash
-git clone <url-do-repositorio>
+git clone git@github.com:moraesvictor/tech-challenge.git
 cd tech-challange-financial
 ```
 
