@@ -18,6 +18,7 @@ type TransactionsContextValue = {
   transactions: Transaction[];
   balanceHistory: BalanceHistory[];
   bankBalance: BankBalance;
+  addTransaction: (transaction: Transaction) => void;
 };
 
 const TransactionsContext = createContext<TransactionsContextValue | null>(
@@ -180,10 +181,15 @@ export const TransactionsProvider = ({
     return history;
   }, [transactions, isClient]);
 
+  const addTransaction = (transaction: Transaction) => {
+    setTransactions((prev) => [...prev, transaction]);
+  };
+
   const value: TransactionsContextValue = {
     transactions,
     balanceHistory,
     bankBalance,
+    addTransaction,
   };
 
   return (
