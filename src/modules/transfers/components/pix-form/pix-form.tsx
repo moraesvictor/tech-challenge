@@ -5,33 +5,56 @@ type PixFormProps = {
   onChangeValue: (value: string) => void;
 };
 
+type FieldConfig = {
+  id: keyof PixFormProps;
+  label: string;
+  placeholder: string;
+  type?: string;
+  currency?: boolean;
+};
+
+const fields: FieldConfig[] = [
+  {
+    id: "onChangeKeyPix",
+    label: "Chave pix",
+    placeholder: "Digite a chave PIX",
+    type: "text",
+  },
+  {
+    id: "onChangeValue",
+    label: "Valor",
+    placeholder: "digite o valor",
+    currency: true,
+  },
+];
+
 export const PixForm = ({ onChangeKeyPix, onChangeValue }: PixFormProps) => {
-  const handleChangeKeyPix = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChangeKeyPix(e.target.value);
+  const handlers: Record<keyof PixFormProps, (value: string) => void> = {
+    onChangeKeyPix,
+    onChangeValue,
   };
 
-  const handleChangeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChangeValue(e.target.value);
+  const handleChange = (fieldId: keyof PixFormProps) => {
+    return (e: React.ChangeEvent<HTMLInputElement>) => {
+      handlers[fieldId](e.target.value);
+    };
   };
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex items-center gap-2">
-        <span className="text-sm text-gray-500 w-12 shrink-0">Chave pix</span>
-        <Input
-          type="text"
-          placeholder="Digite a chave PIX"
-          onChange={handleChangeKeyPix}
-        />
-      </div>
-      <div className="flex items-center gap-2">
-        <span className="text-sm text-gray-500 w-12 shrink-0">Valor</span>
-        <Input
-          currency
-          placeholder="digite o valor"
-          onChange={handleChangeValue}
-        />
-      </div>
+      {fields.map((field) => (
+        <div key={field.id} className="flex items-center gap-2">
+          <span className="text-sm text-gray-500 w-12 shrink-0">
+            {field.label}
+          </span>
+          <Input
+            type={field.type}
+            placeholder={field.placeholder}
+            currency={field.currency}
+            onChange={handleChange(field.id)}
+          />
+        </div>
+      ))}
     </div>
   );
 };
