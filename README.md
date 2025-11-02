@@ -352,6 +352,175 @@ npm run lint         # Executa ESLint
 - `/transferencias` - Adicionar nova transação (PIX/Transferência)
 - `/investimentos` - Visualização de investimentos
 
+## 🏗 Arquitetura e Padrões de Design
+
+Este projeto implementa uma arquitetura modular e escalável seguindo os princípios de **Clean Architecture** e **Separation of Concerns**. A estrutura foi pensada para facilitar manutenção, testes e evolução do código.
+
+### 🎯 Estrutura Arquitetural
+
+#### 1. **Arquitetura Modular**
+O projeto está organizado em **módulos independentes**, cada um representando uma funcionalidade completa:
+
+```
+src/modules/
+├── dashboard/          # Módulo do Dashboard
+├── transactions/       # Módulo de Transações
+├── transfers/          # Módulo de Transferências
+├── investments/        # Módulo de Investimentos
+├── home/               # Módulo da Home Pública
+└── private/            # Módulo de área privada
+```
+
+**Benefícios:**
+- ✅ **Baixo Acoplamento**: Cada módulo é independente e pode ser desenvolvido/testado isoladamente
+- ✅ **Alta Coesão**: Funcionalidades relacionadas estão agrupadas logicamente
+- ✅ **Escalabilidade**: Novas funcionalidades podem ser adicionadas como novos módulos sem afetar o código existente
+- ✅ **Manutenibilidade**: Fácil localizar e corrigir bugs em módulos específicos
+
+#### 2. **Separação de Responsabilidades**
+
+A arquitetura separa claramente as responsabilidades:
+
+- **`components/ui/`**: Design System com componentes reutilizáveis e genéricos (Button, Input, Modal, etc.)
+- **`modules/`**: Lógica de negócio e componentes específicos de cada feature
+- **`lib/`**: Utilitários, contexts, factories e configurações compartilhadas
+- **`app/`**: Rotas e layouts do Next.js (camada de apresentação)
+
+**Benefícios:**
+- ✅ **Reutilização**: Componentes UI podem ser usados em qualquer módulo
+- ✅ **Testabilidade**: Cada camada pode ser testada independentemente
+- ✅ **Clareza**: Fácil entender onde cada tipo de código deve estar
+
+#### 3. **Container/Presentation Pattern**
+
+Cada módulo utiliza o padrão **Container/Presentation**:
+
+- **Containers** (`*-container.tsx`): Orquestram componentes e gerenciam estado
+- **Components**: Componentes puros focados em apresentação
+- **Hooks**: Lógica reutilizável isolada em hooks customizados
+
+**Exemplo:**
+```tsx
+// Container orquestra componentes
+<DashboardContainer>
+  <DashboardBalanceCard />  // Componente de apresentação
+  <DashboardBankStatement /> // Componente de apresentação
+</DashboardContainer>
+```
+
+**Benefícios:**
+- ✅ **Separação clara**: Lógica separada da apresentação
+- ✅ **Reutilização**: Componentes podem ser reutilizados com diferentes containers
+- ✅ **Testes simplificados**: Componentes puros são mais fáceis de testar
+
+#### 4. **Context API para Gerenciamento de Estado Global**
+
+O projeto utiliza **React Context API** para gerenciar estado compartilhado:
+
+- **`TransactionsContext`**: Gerencia transações, saldo e histórico
+- **`AuthContext`**: Gerencia autenticação e dados do usuário
+- **`ModalContext`**: Gerencia abertura/fechamento de modais
+- **`ToastContext`**: Gerencia notificações toast
+
+**Benefícios:**
+- ✅ **Estado Global Organizado**: Estado compartilhado centralizado e acessível
+- ✅ **Sem Prop Drilling**: Evita passar props por múltiplos níveis
+- ✅ **Performance**: Contextos isolados permitem re-renders otimizados
+- ✅ **Manutenibilidade**: Lógica de estado centralizada e fácil de gerenciar
+
+#### 5. **Hooks Customizados**
+
+A lógica de negócio é encapsulada em **hooks customizados**:
+
+```tsx
+// Exemplo: use-bank-balance.ts
+export const useBankBalance = () => {
+  const { bankBalance } = useTransactions();
+  return bankBalance;
+};
+```
+
+**Benefícios:**
+- ✅ **Reutilização**: Lógica pode ser compartilhada entre componentes
+- ✅ **Testabilidade**: Hooks podem ser testados isoladamente
+- ✅ **Legibilidade**: Componentes ficam mais limpos e focados em UI
+- ✅ **Manutenibilidade**: Mudanças na lógica ficam centralizadas nos hooks
+
+#### 6. **Factory Pattern para Dados Mockados**
+
+O projeto utiliza o padrão **Factory** para gerar dados mockados:
+
+- **`transaction.factory.ts`**: Gera transações financeiras
+- **`investment.factory.ts`**: Gera dados de investimentos
+
+**Benefícios:**
+- ✅ **Flexibilidade**: Fácil ajustar quantidade e tipo de dados gerados
+- ✅ **Consistência**: Dados seguem sempre o mesmo padrão
+- ✅ **Testabilidade**: Fácil criar dados de teste para diferentes cenários
+- ✅ **Manutenibilidade**: Mudanças no schema são feitas em um único lugar
+
+#### 7. **App Router com Route Groups**
+
+O Next.js App Router utiliza **Route Groups** para organizar rotas:
+
+- **`(public)/`**: Rotas públicas (não requerem autenticação)
+- **`(private)/`**: Rotas privadas (protegidas por autenticação)
+
+**Benefícios:**
+- ✅ **Organização Clara**: Rotas agrupadas por funcionalidade
+- ✅ **Layouts Específicos**: Cada grupo pode ter seu próprio layout
+- ✅ **Proteção de Rotas**: Fácil aplicar middleware/autenticação por grupo
+- ✅ **URLs Limpas**: Route Groups não aparecem na URL (ex: `/dashboard` não é `/private/dashboard`)
+
+#### 8. **Design System Centralizado**
+
+O Design System está centralizado em `components/ui/`:
+
+- Todos os componentes seguem os mesmos padrões de design
+- Consistência visual garantida em toda a aplicação
+- Fácil manutenção e evolução do design
+
+**Benefícios:**
+- ✅ **Consistência Visual**: Interface unificada e profissional
+- ✅ **Manutenibilidade**: Mudanças de design em um lugar refletem em toda a app
+- ✅ **Produtividade**: Desenvolvedores não precisam recriar componentes
+- ✅ **Acessibilidade**: Padrões de acessibilidade aplicados centralmente
+
+### 📊 Fluxo de Dados
+
+```
+User Action
+    ↓
+Component (UI)
+    ↓
+Custom Hook (lógica de negócio)
+    ↓
+Context API (estado global)
+    ↓
+Factory (dados mockados)
+    ↓
+UI Update
+```
+
+### 🎨 Princípios Aplicados
+
+1. **SOLID**: Princípios SOLID aplicados na organização do código
+2. **DRY (Don't Repeat Yourself)**: Código reutilizado através de componentes e hooks
+3. **Single Responsibility**: Cada arquivo/classe tem uma responsabilidade única
+4. **Separation of Concerns**: Separação clara entre UI, lógica e dados
+5. **Type Safety**: TypeScript garante type safety em toda a aplicação
+
+### 🚀 Benefícios Gerais da Arquitetura
+
+- **Escalabilidade**: Fácil adicionar novas funcionalidades sem quebrar código existente
+- **Manutenibilidade**: Código organizado facilita correções e melhorias
+- **Colaboração**: Múltiplos desenvolvedores podem trabalhar em módulos diferentes sem conflitos
+- **Performance**: Estrutura otimizada permite lazy loading e code splitting eficiente
+- **Testabilidade**: Cada camada pode ser testada independentemente
+- **Documentação Implícita**: A estrutura do projeto documenta a arquitetura automaticamente
+
+---
+
 ## 📝 Observações Importantes
 
 1. **Dados Simulados**: Todos os dados são gerados via faker e não persistem após recarregar a página (exceto dados do usuário no IndexedDB)
