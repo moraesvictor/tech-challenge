@@ -1,5 +1,5 @@
 "use client";
-import { useMemo } from "react";
+import { useMemo, memo } from "react";
 import { CardBase } from "@/components/ui/card-base/card-base";
 import { Button, BUTTON_VARIANTS } from "@/components";
 import { useTransactions } from "@/lib/transactions/transactions-context";
@@ -9,8 +9,9 @@ import { EditTransactionModal } from "../edit-transaction-modal/edit-transaction
 import { DeleteTransactionModal } from "../delete-transaction-modal/delete-transaction-modal";
 import { useToastMethods } from "@/components/ui/toast/hooks/use-toast-methods";
 import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
+import { SUCCESS_MESSAGES } from "@/lib/constants/messages";
 
-export const TransactionsList = () => {
+export const TransactionsList = memo(() => {
   const { transactions, deleteTransaction } = useTransactions();
   const { open, close } = useModal();
   const toast = useToastMethods();
@@ -95,7 +96,7 @@ export const TransactionsList = () => {
           transaction={transaction}
           onConfirm={() => {
             deleteTransaction(transaction.id);
-            toast.success("Transação deletada com sucesso!", "bottom-right");
+            toast.success(SUCCESS_MESSAGES.TRANSACTION_DELETED, "bottom-right");
             close();
           }}
           onCancel={close}
@@ -191,5 +192,7 @@ export const TransactionsList = () => {
       </div>
     </CardBase>
   );
-};
+});
+
+TransactionsList.displayName = "TransactionsList";
 

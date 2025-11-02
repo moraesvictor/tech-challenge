@@ -43,6 +43,11 @@ Sistema de gerenciamento financeiro desenvolvido como projeto final da fase util
 - Formulário pré-preenchido com dados atuais
 - Validação e atualização em tempo real
 
+#### ✅ Logout
+- Botão de sair disponível no header da área privada
+- Modal de confirmação antes de realizar logout
+- Redirecionamento automático para página inicial após logout
+
 ### Tecnologias Obrigatórias
 
 #### ✅ Next.js
@@ -158,7 +163,9 @@ tech-challange-financial/
 │   │   │   ├── toast/                # Componente Toast
 │   │   │   ├── progress-bar/         # Componente ProgressBar
 │   │   │   ├── dropdown/             # Componente Dropdown
-│   │   │   └── avatar/               # Componente Avatar
+│   │   │   ├── avatar/               # Componente Avatar
+│   │   │   ├── error-message/        # Componente ErrorMessage
+│   │   │   └── loading-spinner/     # Componente LoadingSpinner
 │   │   └── layout/                   # Componentes de layout
 │   ├── modules/                      # Módulos da aplicação
 │   │   ├── dashboard/                # Módulo Dashboard
@@ -256,6 +263,36 @@ const toast = useToastMethods();
 toast.success("Mensagem de sucesso!", "bottom-right");
 ```
 
+#### Logout Modal
+Modal de confirmação para logout do usuário.
+
+```tsx
+import { LogoutModal } from "@/modules/private/private-header/private-header-container/components/logout-modal";
+import { useModal } from "@/components/ui/modal/hooks/use-modal-context";
+import { useAuth } from "@/lib/indexedDb/auth-context";
+import { useRouter } from "next/navigation";
+
+const { open, close } = useModal();
+const { logout } = useAuth();
+const router = useRouter();
+
+const handleLogout = () => {
+  open({
+    title: "Confirmar saída",
+    content: (
+      <LogoutModal
+        onConfirm={() => {
+          logout();
+          close();
+          router.push("/home");
+        }}
+        onCancel={close}
+      />
+    ),
+  });
+};
+```
+
 #### ProgressBar
 Barra de progresso para métricas.
 
@@ -275,6 +312,8 @@ import { ProgressBar } from "@/components";
 - Sistema de autenticação simulado usando IndexedDB
 - Persistência de dados do usuário
 - Proteção de rotas privadas
+- Logout com confirmação via modal
+- Redirecionamento automático para página inicial após logout
 
 ### Dashboard
 - Visualização do saldo bancário

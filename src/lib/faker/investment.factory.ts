@@ -1,17 +1,17 @@
 import { faker } from "@faker-js/faker";
-import { Investment, InvestmentHistory } from "../types/investment.types";
+import {
+  Investment,
+  InvestmentHistory,
+  InvestmentType,
+} from "../types/investment.types";
 
-const investmentTypes = [
-  "Tesouro Direto",
-  "CDB",
-  "LCI",
-  "LCA",
-  "Fundos de Renda Fixa",
-  "Fundos Multimercado",
-  "Ações",
+const investmentTypes: InvestmentType[] = [
+  "FIXED_INCOME",
+  "STOCKS",
+  "REAL_ESTATE",
   "ETF",
-  "Debêntures",
-  "Poupança",
+  "DEBENTURES",
+  "SAVINGS",
 ];
 
 const investmentNames = [

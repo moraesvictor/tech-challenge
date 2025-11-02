@@ -1,3 +1,5 @@
+import { APP_CONSTANTS } from "../config/constants";
+
 /**
  * Formata um número como moeda brasileira (R$ 0,00)
  * @param value - Valor numérico em centavos ou string numérica
@@ -37,7 +39,7 @@ export const applyCurrencyMask = (value: string): string => {
 
   if (!numbers) return "R$ 0,00";
 
-  const limitedNumbers = numbers.slice(0, 11);
+  const limitedNumbers = numbers.slice(0, APP_CONSTANTS.CURRENCY_MAX_DIGITS);
 
   return formatCurrency(limitedNumbers);
 };

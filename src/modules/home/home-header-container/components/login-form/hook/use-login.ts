@@ -1,5 +1,7 @@
 import { useAuth } from "@/lib/indexedDb/auth-context";
 import { useState } from "react";
+import { logger } from "@/lib/utils/logger";
+import { ERROR_MESSAGES } from "@/lib/constants/messages";
 
 export function useLogin() {
   const { ready, validateCredentials, login: loginUser } = useAuth();
@@ -9,24 +11,31 @@ export function useLogin() {
   const login = async (email: string, password: string) => {
     setError(null);
     if (!ready) {
-      setError("Banco de dados ainda não está pronto");
+      setError(ERROR_MESSAGES.DATABASE_NOT_READY);
       return null;
     }
 
     setLoading(true);
 
-    const { valid, user } = await validateCredentials(email, password);
+    try {
+      const { valid, user } = await validateCredentials(email, password);
 
-    if (!valid || !user) {
-      setError("Email ou senha inválidos");
+      if (!valid || !user) {
+        setError(ERROR_MESSAGES.INVALID_CREDENTIALS);
+        setLoading(false);
+        return null;
+      }
+
+      await loginUser(email, password);
+
       setLoading(false);
+      return user;
+    } catch (error) {
+      setError(ERROR_MESSAGES.INVALID_CREDENTIALS);
+      setLoading(false);
+      logger.error(error, "useLogin");
       return null;
     }
-
-    await loginUser(email, password);
-
-    setLoading(false);
-    return user;
   };
 
   return { login, error, loading };

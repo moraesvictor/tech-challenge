@@ -2,6 +2,9 @@
 import { useMemo, useState, useEffect } from "react";
 import { useAuth } from "@/lib/indexedDb/auth-context";
 import { createInvestments } from "@/lib/faker/investment.factory";
+import { APP_CONSTANTS } from "@/lib/config/constants";
+import { InvestmentType } from "@/lib/types/investment.types";
+import { getInvestmentTypeName } from "@/lib/utils/investment-type-mapper";
 
 export type InvestmentDistribution = {
   name: string;
@@ -37,7 +40,12 @@ export const useInvestmentsDistribution = (): InvestmentDistribution[] => {
     if (!isClient || !ready) return;
 
     const seed = currentUser?.id || 0;
-    const count = 10 + (seed % 10);
+    const count =
+      APP_CONSTANTS.INVESTMENT_COUNT_MIN +
+      (seed %
+        (APP_CONSTANTS.INVESTMENT_COUNT_MAX -
+          APP_CONSTANTS.INVESTMENT_COUNT_MIN +
+          1));
 
     const generatedInvestments = createInvestments(count);
     setInvestments(generatedInvestments);
@@ -49,7 +57,10 @@ export const useInvestmentsDistribution = (): InvestmentDistribution[] => {
     }
 
     const now = new Date();
-    const typeMap: Record<string, number> = {};
+    const typeMap: Record<InvestmentType, number> = {} as Record<
+      InvestmentType,
+      number
+    >;
 
     for (const investment of investments) {
       const investmentDate = new Date(
@@ -71,8 +82,8 @@ export const useInvestmentsDistribution = (): InvestmentDistribution[] => {
     }
 
     return Object.entries(typeMap)
-      .map(([name, value], index) => ({
-        name,
+      .map(([type, value], index) => ({
+        name: getInvestmentTypeName(type as InvestmentType),
         value: Number(value.toFixed(2)),
         fill: colors[index % colors.length],
       }))

@@ -13,6 +13,8 @@ import {
   BalanceHistory,
   BankBalance,
 } from "../types/transaction.types";
+import { APP_CONSTANTS } from "../config/constants";
+import { dateUtils } from "../utils/date";
 
 type TransactionsContextValue = {
   transactions: Transaction[];
@@ -44,17 +46,79 @@ export const TransactionsProvider = ({
     if (!isClient || !ready) return;
 
     const seed = currentUser?.id || 0;
-    const count = 15 + (seed % 15);
+    const count =
+      APP_CONSTANTS.TRANSACTION_COUNT_MIN +
+      (seed % (APP_CONSTANTS.TRANSACTION_COUNT_MAX - APP_CONSTANTS.TRANSACTION_COUNT_MIN + 1));
 
     const generatedTransactions = createTransactions(count);
     setTransactions(generatedTransactions);
   }, [isClient, ready, currentUser?.id]);
 
+  const { month: currentMonth, year: currentYear } = dateUtils.getCurrentMonth();
+
+  const monthlyTransactions = useMemo(() => {
+    if (!isClient || transactions.length === 0) return [];
+
+    return transactions.filter((tx) => {
+      const txDate = dateUtils.parseBR(tx.date);
+      return (
+        txDate.getMonth() === currentMonth &&
+        txDate.getFullYear() === currentYear
+      );
+    });
+  }, [transactions, currentMonth, currentYear, isClient]);
+
+  const lastMonthTransactions = useMemo(() => {
+    if (!isClient || transactions.length === 0) return [];
+
+    const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+    const lastMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+
+    return transactions.filter((tx) => {
+      const txDate = dateUtils.parseBR(tx.date);
+      return (
+        txDate.getMonth() === lastMonth &&
+        txDate.getFullYear() === lastMonthYear
+      );
+    });
+  }, [transactions, currentMonth, currentYear, isClient]);
+
+  const income = useMemo(() => {
+    return monthlyTransactions
+      .filter((tx) => tx.type === "credit")
+      .reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
+  }, [monthlyTransactions]);
+
+  const expenses = useMemo(() => {
+    return monthlyTransactions
+      .filter((tx) => tx.type === "debit")
+      .reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
+  }, [monthlyTransactions]);
+
+  const currentMonthBalance = useMemo(() => {
+    return monthlyTransactions.reduce((sum, tx) => sum + tx.amount, 0);
+  }, [monthlyTransactions]);
+
+  const lastMonthBalance = useMemo(() => {
+    return lastMonthTransactions.reduce((sum, tx) => sum + tx.amount, 0);
+  }, [lastMonthTransactions]);
+
+  const balanceVariation = useMemo(() => {
+    if (lastMonthBalance !== 0) {
+      return (
+        ((currentMonthBalance - lastMonthBalance) /
+          Math.abs(lastMonthBalance)) *
+        100
+      );
+    }
+    return currentMonthBalance !== 0 ? 100 : 0;
+  }, [currentMonthBalance, lastMonthBalance]);
+
   const bankBalance = useMemo(() => {
     if (!isClient || transactions.length === 0) {
       return {
         userName: currentUser?.username || "Usuário",
-        balance: 10000,
+        balance: APP_CONSTANTS.INITIAL_BALANCE,
         balanceVariation: 0,
         income: 0,
         expenses: 0,
@@ -62,62 +126,10 @@ export const TransactionsProvider = ({
       };
     }
 
-    const initialBalance = 10000;
-
-    const totalBalance = transactions.reduce(
+    const totalBalance = transactions.reduce<number>(
       (sum, tx) => sum + tx.amount,
-      initialBalance
+      APP_CONSTANTS.INITIAL_BALANCE
     );
-
-    const now = new Date();
-    const currentMonth = now.getMonth();
-    const currentYear = now.getFullYear();
-
-    const monthlyTransactions = transactions.filter((tx) => {
-      const txDate = new Date(tx.date.split("/").reverse().join("-"));
-      return (
-        txDate.getMonth() === currentMonth &&
-        txDate.getFullYear() === currentYear
-      );
-    });
-
-    const income = monthlyTransactions
-      .filter((tx) => tx.type === "credit")
-      .reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
-
-    const expenses = monthlyTransactions
-      .filter((tx) => tx.type === "debit")
-      .reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
-
-    const currentMonthBalance = monthlyTransactions.reduce(
-      (sum, tx) => sum + tx.amount,
-      0
-    );
-
-    const lastMonthTransactions = transactions.filter((tx) => {
-      const txDate = new Date(tx.date.split("/").reverse().join("-"));
-      const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
-      const lastMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
-
-      return (
-        txDate.getMonth() === lastMonth &&
-        txDate.getFullYear() === lastMonthYear
-      );
-    });
-
-    const lastMonthBalance = lastMonthTransactions.reduce(
-      (sum, tx) => sum + tx.amount,
-      0
-    );
-
-    const balanceVariation =
-      lastMonthBalance !== 0
-        ? ((currentMonthBalance - lastMonthBalance) /
-            Math.abs(lastMonthBalance)) *
-          100
-        : currentMonthBalance !== 0
-        ? 100
-        : 0;
 
     const monthlyGoal = income * 0.8;
     const progress = monthlyGoal > 0 ? (expenses / monthlyGoal) * 100 : 0;
@@ -130,18 +142,23 @@ export const TransactionsProvider = ({
       expenses: Number(expenses.toFixed(2)),
       progress: Number(Math.min(progress, 100).toFixed(0)),
     };
-  }, [transactions, currentUser?.username, isClient]);
+  }, [
+    transactions,
+    currentUser?.username,
+    isClient,
+    income,
+    expenses,
+    balanceVariation,
+  ]);
 
   const balanceHistory = useMemo(() => {
     if (!isClient || transactions.length === 0) {
       return [];
     }
 
-    const initialBalance = 10000;
-
     const sortedTransactions = [...transactions].sort((a, b) => {
-      const dateA = new Date(a.date.split("/").reverse().join("-"));
-      const dateB = new Date(b.date.split("/").reverse().join("-"));
+      const dateA = dateUtils.parseBR(a.date);
+      const dateB = dateUtils.parseBR(b.date);
       return dateA.getTime() - dateB.getTime();
     });
 
@@ -159,10 +176,10 @@ export const TransactionsProvider = ({
         59
       );
 
-      let balance = initialBalance;
+      let balance = APP_CONSTANTS.INITIAL_BALANCE;
 
       for (const tx of sortedTransactions) {
-        const txDate = new Date(tx.date.split("/").reverse().join("-"));
+        const txDate = dateUtils.parseBR(tx.date);
 
         if (txDate <= endOfMonth) {
           balance += tx.amount;

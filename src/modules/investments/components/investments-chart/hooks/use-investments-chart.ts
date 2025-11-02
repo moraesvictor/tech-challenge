@@ -5,6 +5,7 @@ import {
   createInvestments,
   createInvestmentHistory,
 } from "@/lib/faker/investment.factory";
+import { APP_CONSTANTS } from "@/lib/config/constants";
 
 export const useInvestmentsChart = () => {
   const { currentUser, ready } = useAuth();
@@ -21,7 +22,12 @@ export const useInvestmentsChart = () => {
     if (!isClient || !ready) return;
 
     const seed = currentUser?.id || 0;
-    const count = 10 + (seed % 10);
+    const count =
+      APP_CONSTANTS.INVESTMENT_COUNT_MIN +
+      (seed %
+        (APP_CONSTANTS.INVESTMENT_COUNT_MAX -
+          APP_CONSTANTS.INVESTMENT_COUNT_MIN +
+          1));
 
     const generatedInvestments = createInvestments(count);
     setInvestments(generatedInvestments);
