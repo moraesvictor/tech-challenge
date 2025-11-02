@@ -5,11 +5,12 @@ import { Dropdown } from "@/components/ui/dropdown/dropdown";
 import { useBankTransferCardController } from "./hooks/use-bank-transfer-card-controller";
 
 export const BankTransferCard = () => {
-  const { handleTypeChange, form } = useBankTransferCardController();
+  const { handleTypeChange, form, handleSubmit } =
+    useBankTransferCardController();
 
   return (
     <CardBase size="l" colorSchema="light" className="w-full">
-      <form className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <h2 className="text-lg font-semibold text-gray-900">
           Transferência e PIX
         </h2>
