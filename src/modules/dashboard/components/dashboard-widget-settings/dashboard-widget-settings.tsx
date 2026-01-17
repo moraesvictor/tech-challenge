@@ -1,7 +1,5 @@
 "use client";
-import { useState } from "react";
 import { Button, BUTTON_VARIANTS } from "@/components";
-import { CardBase } from "@/components/ui/card-base/card-base";
 import { useModal } from "@/components/ui/modal/hooks/use-modal-context";
 import { useDashboardWidgets, DashboardWidget } from "@/lib/hooks/use-dashboard-widgets";
 import { FaCog, FaCheck } from "react-icons/fa";

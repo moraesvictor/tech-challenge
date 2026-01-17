@@ -131,6 +131,7 @@ export const FileUpload = ({
               </button>
             </div>
             {file?.type.startsWith("image/") && (
+              // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={preview}
                 alt="Preview"
