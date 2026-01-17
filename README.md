@@ -8,11 +8,13 @@ Sistema de gerenciamento financeiro desenvolvido como projeto final da fase util
 - [Tecnologias Utilizadas](#tecnologias-utilizadas)
 - [Pré-requisitos](#pré-requisitos)
 - [Instalação e Execução](#instalação-e-execução)
+- [Execução com Docker](#-execução-com-docker)
 - [Estrutura do Projeto](#estrutura-do-projeto)
 - [Design System](#design-system)
 - [Funcionalidades](#funcionalidades)
 - [Dados Mockados](#dados-mockados)
 - [Scripts Disponíveis](#scripts-disponíveis)
+- [Documentação Adicional](#-documentação-adicional)
 
 ## ✅ Requisitos Implementados
 
@@ -23,12 +25,30 @@ Sistema de gerenciamento financeiro desenvolvido como projeto final da fase util
 - Exibição de informações sobre o saldo da conta corrente
 - Extrato das últimas transações financeiras
 - Seção para iniciar nova transação com opções para selecionar tipo e valor
+- **NOVO**: Gráficos e análises financeiras detalhadas
+  - Gráfico de evolução do patrimônio
+  - Gráfico de gastos por categoria (Pizza)
+  - Resumo financeiro com comparação mensal
+  - Análise de receitas, despesas e economia
+- **NOVO**: Personalização do dashboard com widgets (Plus)
+  - Usuário pode escolher quais widgets exibir
+  - Configuração salva no localStorage
+  - Widgets disponíveis: Card de Saldo, Extrato, Gráficos, Resumo Financeiro
 
 #### ✅ Listagem de Transações
 - Página completa que exibe todas as transações realizadas
 - Opção para visualizar detalhes de cada transação
 - Opção para editar transações existentes
 - Opção para deletar transações com confirmação via modal
+- **NOVO**: Filtros avançados
+  - Busca por descrição
+  - Filtro por tipo (Receita/Despesa)
+  - Filtro por categoria
+  - Filtro por período (data inicial e final)
+- **NOVO**: Paginação com scroll infinito
+  - Carregamento automático ao rolar a página
+  - Otimização de performance para grandes volumes de dados
+  - Exibição de 20 transações por vez
 
 #### ✅ Adicionar Nova Transação
 - Página dedicada para adicionar novas transações
@@ -42,6 +62,19 @@ Sistema de gerenciamento financeiro desenvolvido como projeto final da fase util
 - Modal para editar informações de transação existente
 - Formulário pré-preenchido com dados atuais
 - Validação e atualização em tempo real
+- **NOVO**: Validação avançada
+  - Validação de descrição (mínimo 3 caracteres)
+  - Validação de valor (deve ser maior que zero, máximo R$ 1.000.000,00)
+  - Validação de data (não pode ser futura)
+  - Mensagens de erro em tempo real
+- **NOVO**: Sugestões automáticas de categorias
+  - Sistema inteligente que sugere categorias baseado na descrição
+  - Categorias disponíveis: Alimentação, Transporte, Moradia, Saúde, Educação, Lazer, Compras, Serviços, Salário, Investimentos, Outros
+- **NOVO**: Upload de anexos
+  - Permite anexar recibos ou documentos relacionados
+  - Suporte para imagens e PDFs
+  - Tamanho máximo de 5MB
+  - Preview de imagens
 
 #### ✅ Logout
 - Botão de sair disponível no header da área privada
@@ -74,6 +107,22 @@ Sistema de gerenciamento financeiro desenvolvido como projeto final da fase util
 - Context API para gerenciamento de estado
 - Dados gerados dinamicamente baseados no usuário logado
 
+#### ✅ Docker
+- Containerização completa da aplicação
+- Dockerfile otimizado com multi-stage build
+- Docker Compose para orquestração
+- Suporte para deploy em ambientes cloud
+
+#### ✅ Gestão de Estado Avançada
+- **Recoil** implementado para gestão de estado complexa
+- Atoms para transações e UI
+- Integração com Context API existente
+
+#### ✅ SSR/SSG Otimizado
+- Metadata dinâmica para SEO
+- Otimizações de performance
+- Configuração standalone para Docker
+
 ## 🛠 Tecnologias Utilizadas
 
 ### Dependências Principais
@@ -85,6 +134,7 @@ Sistema de gerenciamento financeiro desenvolvido como projeto final da fase util
 - **recharts** 3.3.0 - Biblioteca de gráficos para React
 - **react-icons** 5.5.0 - Ícones populares para React
 - **clsx** 2.1.1 - Utilitário para construção de classes CSS condicionais
+- **recoil** - Biblioteca para gestão de estado avançada
 
 ### Ferramentas de Desenvolvimento
 - **ESLint** - Linter para JavaScript/TypeScript
@@ -96,12 +146,15 @@ Antes de começar, certifique-se de ter instalado:
 
 - **Node.js** 20.x ou superior
 - **npm** 10.x ou superior (ou yarn/pnpm/bun)
+- **Docker** e **Docker Compose** (opcional, para containerização)
 
 Você pode verificar suas versões com:
 
 ```bash
 node --version
 npm --version
+docker --version
+docker-compose --version
 ```
 
 ## 🚀 Instalação e Execução
@@ -137,6 +190,40 @@ npm run build
 
 ```bash
 npm start
+```
+
+## 🐳 Execução com Docker
+
+### 1. Build da imagem Docker
+
+```bash
+docker build -t tech-challenge-financial .
+```
+
+### 2. Executar com Docker Compose
+
+```bash
+docker-compose up -d
+```
+
+A aplicação estará disponível em [http://localhost:3000](http://localhost:3000)
+
+### 3. Parar os containers
+
+```bash
+docker-compose down
+```
+
+### 4. Ver logs
+
+```bash
+docker-compose logs -f
+```
+
+### 5. Rebuild após mudanças
+
+```bash
+docker-compose up -d --build
 ```
 
 ## 📁 Estrutura do Projeto
@@ -559,6 +646,14 @@ UI Update
 - **Documentação Implícita**: A estrutura do projeto documenta a arquitetura automaticamente
 
 ---
+
+## 📚 Documentação Adicional
+
+Documentação detalhada sobre aspectos específicos do projeto:
+
+- **[Guia Completo de Docker](./docs/docker.md)** - Documentação completa sobre execução com Docker
+- **[Quick Start Docker](./docs/quick-start-docker.md)** - Guia rápido de referência para Docker
+- **[Índice da Documentação](./docs/README.md)** - Índice de toda a documentação disponível
 
 ## 📝 Observações Importantes
 

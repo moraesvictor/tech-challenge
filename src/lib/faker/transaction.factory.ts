@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker";
-import { Transaction } from "../types/transaction.types";
+import { Transaction, TransactionCategory } from "../types/transaction.types";
+import { getCategoryFromDescription, TRANSACTION_CATEGORIES } from "../constants/categories";
 
 const transactionDescriptions = {
   credit: [
@@ -49,12 +50,19 @@ export const createTransaction = (daysAgo: number): Transaction => {
     finalDescription = `${description} ${faker.person.firstName()}`;
   }
 
+  const suggestedCategory = getCategoryFromDescription(finalDescription);
+  const availableCategories = TRANSACTION_CATEGORIES[type];
+  const category: TransactionCategory | undefined = suggestedCategory 
+    ? (availableCategories.includes(suggestedCategory) ? suggestedCategory : undefined)
+    : faker.helpers.arrayElement([...availableCategories, undefined]);
+
   return {
     id: faker.string.uuid(),
     description: finalDescription,
     date: generateTransactionDate(daysAgo),
     amount: type === "credit" ? amount : -amount,
     type,
+    category,
   };
 };
 
