@@ -5,6 +5,7 @@ import { ModalProvider } from "@/components/ui/modal/hooks/use-modal-context";
 import { ToastProvider } from "@/components/ui/toast/hooks/use-toast-context";
 import { AuthProvider } from "@/lib/indexedDb/auth-context";
 import { TransactionsProvider } from "@/lib/transactions/transactions-context";
+import { RecoilProvider } from "@/lib/recoil/recoil-provider";
 import { ErrorBoundary } from "@/components/error-boundary/error-boundary";
 
 const geistSans = Geist({
@@ -34,13 +35,15 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ErrorBoundary>
-          <AuthProvider>
-            <TransactionsProvider>
-              <ToastProvider>
-                <ModalProvider>{children}</ModalProvider>
-              </ToastProvider>
-            </TransactionsProvider>
-          </AuthProvider>
+          <RecoilProvider>
+            <AuthProvider>
+              <TransactionsProvider>
+                <ToastProvider>
+                  <ModalProvider>{children}</ModalProvider>
+                </ToastProvider>
+              </TransactionsProvider>
+            </AuthProvider>
+          </RecoilProvider>
         </ErrorBoundary>
       </body>
     </html>
