@@ -1,6 +1,7 @@
 "use client";
 import { useMemo, useState } from "react";
 import { Input } from "@/components/ui/input/input";
+import { InputWithIcon } from "@/components/ui/input-with-icon/input-with-icon";
 import { Dropdown } from "@/components/ui/dropdown/dropdown";
 import { Transaction, TransactionCategory } from "@/lib/types/transaction.types";
 import { CATEGORY_LABELS, TRANSACTION_CATEGORIES } from "@/lib/constants/categories";
@@ -150,20 +151,17 @@ export const TransactionsFilters = ({
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {/* Busca */}
-        <div className="relative">
-          <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-          <Input
-            type="text"
-            placeholder="Buscar por descrição..."
-            value={filters.search}
-            onChange={(e) => handleFilterChange("search", e.target.value)}
-            className="pl-10"
-            aria-label="Buscar transações"
-          />
-        </div>
+        <InputWithIcon
+          icon={<FaSearch className="text-gray-400" />}
+          iconPosition="left"
+          type="text"
+          label="Buscar por descrição"
+          placeholder="Buscar por descrição..."
+          value={filters.search}
+          onChange={(e) => handleFilterChange("search", e.target.value)}
+          aria-label="Buscar transações"
+        />
 
-        {/* Filtro de tipo */}
         <Dropdown
           label="Tipo"
           options={typeOptions}
@@ -177,7 +175,6 @@ export const TransactionsFilters = ({
           placeholder="Selecione o tipo"
         />
 
-        {/* Filtro de categoria */}
         <Dropdown
           label="Categoria"
           options={categoryOptions}
@@ -187,7 +184,6 @@ export const TransactionsFilters = ({
           disabled={filters.type === "all" && categoryOptions.length === 1}
         />
 
-        {/* Filtro de data (de) */}
         <Input
           type="date"
           label="Data inicial"
@@ -195,7 +191,6 @@ export const TransactionsFilters = ({
           onChange={(e) => handleFilterChange("dateFrom", e.target.value)}
         />
 
-        {/* Filtro de data (até) */}
         <Input
           type="date"
           label="Data final"

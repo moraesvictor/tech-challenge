@@ -5,10 +5,19 @@ import { useCurrencyMask } from "./hooks/use-currency-mask";
 import { parseCurrency } from "@/lib/utils/currency-mask";
 import { ErrorMessage } from "../error-message/error-message";
 
-type InputProps = InputHTMLAttributes<HTMLInputElement> & {
+export type InputSize = "sm" | "md" | "lg";
+
+export type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, "size"> & {
   label?: string;
   errorLabel?: string;
   currency?: boolean;
+  inputSize?: InputSize;
+};
+
+const INPUT_SIZE_CLASSES: Record<InputSize, string> = {
+  sm: "px-3 py-1.5 text-sm",
+  md: "px-4 py-2 text-base",
+  lg: "px-5 py-3 text-lg",
 };
 
 export const Input: React.FC<InputProps> = ({
@@ -19,6 +28,7 @@ export const Input: React.FC<InputProps> = ({
   value,
   onChange,
   onBlur,
+  inputSize = "md",
   ...props
 }) => {
   const inputId = useId();
@@ -82,7 +92,8 @@ export const Input: React.FC<InputProps> = ({
           e.currentTarget.setCustomValidity("");
         }}
         className={clsx(
-          "w-full px-4 py-2 border rounded-lg shadow-sm placeholder-gray-400",
+          "w-full border rounded-lg shadow-sm placeholder-gray-400",
+          INPUT_SIZE_CLASSES[inputSize],
           "focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500",
           "disabled:opacity-50 disabled:cursor-not-allowed transition duration-200",
           errorLabel && "border-red-500",
