@@ -127,6 +127,13 @@ export function useAuthIndexedDB() {
     if (valid && user) {
       setCurrentUser(user);
       localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
+      
+      const expires = new Date();
+      expires.setHours(expires.getHours() + 24);
+      
+      const secure = process.env.NODE_ENV === 'production' ? '; Secure' : '';
+      document.cookie = `auth-token=${user.id}; expires=${expires.toUTCString()}; path=/; SameSite=Strict${secure}`;
+      document.cookie = `auth-session=active; expires=${expires.toUTCString()}; path=/; SameSite=Strict${secure}`;
     }
     return { valid, user };
   };
@@ -134,6 +141,8 @@ export function useAuthIndexedDB() {
   const logout = () => {
     setCurrentUser(null);
     localStorage.removeItem(CURRENT_USER_KEY);
+    document.cookie = `auth-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+    document.cookie = `auth-session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
   };
 
   const getAllUsers = async () => {
