@@ -652,6 +652,9 @@ UI Update
 Documentação detalhada sobre aspectos específicos do projeto:
 
 - **[Guia Completo de Docker](./docs/docker.md)** - Documentação completa sobre execução com Docker
+- **[Guia de Deploy na Vercel](./docs/vercel.md)** - Como fazer deploy do projeto na Vercel
+- **[Arquitetura de Microfrontends](./docs/microfrontends.md)** - Explicação da arquitetura modular e microfrontends
+- **[Segurança em Ambiente Cloud](./docs/security.md)** - Práticas de segurança e proteção de acesso
 - **[Quick Start Docker](./docs/quick-start-docker.md)** - Guia rápido de referência para Docker
 - **[Índice da Documentação](./docs/README.md)** - Índice de toda a documentação disponível
 

@@ -37,6 +37,33 @@ Guia completo sobre:
 - Deploy em produção
 - Boas práticas de segurança
 
+### [vercel.md](./vercel.md)
+Guia completo sobre:
+- Deploy na Vercel (recomendado para Next.js)
+- Configuração do projeto
+- Deploy automático e contínuo
+- Domínio personalizado
+- Monitoramento e logs
+- Troubleshooting
+
+### [microfrontends.md](./microfrontends.md)
+Documentação completa sobre:
+- Arquitetura modular implementada
+- Preparação para microfrontends
+- Como funciona a integração entre módulos
+- Estrutura e comunicação dos módulos
+- Evolução para microfrontends completos
+- Como explicar na apresentação
+
+### [security.md](./security.md)
+Documentação completa sobre:
+- Autenticação e autorização
+- Proteção de rotas (middleware e componente)
+- Headers de segurança implementados
+- Proteção de dados (hash de senhas)
+- Boas práticas de segurança em cloud
+- Configuração na Vercel
+
 ## 🔗 Links Úteis
 
 - [README Principal](../README.md)
