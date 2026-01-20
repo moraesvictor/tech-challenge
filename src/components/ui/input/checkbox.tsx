@@ -48,18 +48,29 @@ export const Checkbox = ({
         disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
       )}
     >
-      <input
-        id={id}
-        type="checkbox"
-        disabled={disabled}
-        checked={isChecked}
-        onChange={handleChange}
-        className={clsx(
-          "appearance-none w-4 h-4 rounded-sm transition-all duration-200 focus:outline-none focus:ring-2 flex-shrink-0 cursor-pointer",
-          "checked:after:content-['✓'] checked:after:text-xs checked:after:flex checked:after:items-center checked:after:justify-center checked:after:text-white checked:after:font-bold checked:after:scale-100 after:scale-0 after:transition-transform",
-          variantStyles[variant]
-        )}
-      />
+      <div className="relative flex-shrink-0 w-4 h-4">
+        <input
+          id={id}
+          type="checkbox"
+          disabled={disabled}
+          checked={isChecked}
+          onChange={handleChange}
+          className={clsx(
+            "appearance-none w-4 h-4 rounded-sm transition-all duration-200 focus:outline-none focus:ring-2 cursor-pointer relative z-10",
+            variantStyles[variant]
+          )}
+        />
+        <span
+          className={clsx(
+            "absolute top-0 left-0 w-4 h-4 flex items-center justify-center text-[10px] leading-none text-white font-bold pointer-events-none transition-opacity duration-200 z-20",
+            isChecked ? "opacity-100" : "opacity-0"
+          )}
+          aria-hidden="true"
+          style={{ lineHeight: "1" }}
+        >
+          ✓
+        </span>
+      </div>
       {label && <span className="text-sm text-gray-800">{label}</span>}
     </label>
   );

@@ -1,5 +1,6 @@
 export { BUTTON_VARIANTS, Button } from "./ui";
 export { ModalBase } from "./ui";
 export { Input } from "./ui";
+export { Checkbox } from "./ui";
 export { ProgressBar } from './ui/progress-bar';
 export { FileUpload } from './ui/file-upload/file-upload';

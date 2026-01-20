@@ -16,15 +16,7 @@ const WIDGET_COMPONENTS = {
 };
 
 export const DashboardContainer = () => {
-  const { widgets, isLoaded } = useDashboardWidgets();
-
-  if (!isLoaded) {
-    return (
-      <div className="flex flex-col gap-8 w-full py-8 px-4 sm:px-8 md:px-16 lg:px-32 xl:px-64">
-        <div className="text-center text-gray-500">Carregando dashboard...</div>
-      </div>
-    );
-  }
+  const { widgets } = useDashboardWidgets();
 
   const renderWidget = (widget: string) => {
     const Component = WIDGET_COMPONENTS[widget as keyof typeof WIDGET_COMPONENTS];

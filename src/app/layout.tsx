@@ -6,6 +6,7 @@ import { ToastProvider } from "@/components/ui/toast/hooks/use-toast-context";
 import { AuthProvider } from "@/lib/indexedDb/auth-context";
 import { TransactionsProvider } from "@/lib/transactions/transactions-context";
 import { RecoilProvider } from "@/lib/recoil/recoil-provider";
+import { DashboardWidgetsProvider } from "@/lib/contexts/dashboard-widgets-context";
 import { ErrorBoundary } from "@/components/error-boundary/error-boundary";
 
 const geistSans = Geist({
@@ -38,9 +39,11 @@ export default function RootLayout({
           <RecoilProvider>
             <AuthProvider>
               <TransactionsProvider>
-                <ToastProvider>
-                  <ModalProvider>{children}</ModalProvider>
-                </ToastProvider>
+                <DashboardWidgetsProvider>
+                  <ToastProvider>
+                    <ModalProvider>{children}</ModalProvider>
+                  </ToastProvider>
+                </DashboardWidgetsProvider>
               </TransactionsProvider>
             </AuthProvider>
           </RecoilProvider>
