@@ -1,10 +1,17 @@
 "use client";
 import React from "react";
 import clsx from "clsx";
+import { InputSize } from "../input/input";
 
 type DropdownOption = {
   label: string;
   value: string;
+};
+
+const DROPDOWN_SIZE_CLASSES: Record<InputSize, string> = {
+  sm: "px-3 py-1.5 text-sm",
+  md: "px-4 py-2 text-base",
+  lg: "px-5 py-3 text-lg",
 };
 
 type DropdownProps = {
@@ -15,6 +22,7 @@ type DropdownProps = {
   placeholder?: string;
   className?: string;
   disabled?: boolean;
+  inputSize?: InputSize;
 };
 
 export const Dropdown = ({
@@ -25,6 +33,7 @@ export const Dropdown = ({
   placeholder,
   className,
   disabled = false,
+  inputSize = "md",
 }: DropdownProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     onChange(e.target.value);
@@ -40,7 +49,8 @@ export const Dropdown = ({
         value={value}
         disabled={disabled}
         className={clsx(
-          "w-full px-4 py-2 pr-3 border rounded-lg shadow-sm placeholder-gray-400",
+          "w-full px-4 py-2 border rounded-lg shadow-sm placeholder-gray-400",
+          DROPDOWN_SIZE_CLASSES[inputSize],
           "focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500",
           "disabled:opacity-50 disabled:cursor-not-allowed transition duration-200",
           className
