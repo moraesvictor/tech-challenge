@@ -8,6 +8,7 @@ import { useModal } from "@/components/ui/modal/hooks/use-modal-context";
 import { EditTransactionModal } from "../edit-transaction-modal/edit-transaction-modal";
 import { DeleteTransactionModal } from "../delete-transaction-modal/delete-transaction-modal";
 import { TransactionsFilters } from "../transactions-filters/transactions-filters";
+import { TransactionCard } from "../transaction-card/transaction-card";
 import { useToastMethods } from "@/components/ui/toast/hooks/use-toast-methods";
 import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
 import { SUCCESS_MESSAGES } from "@/lib/constants/messages";
@@ -181,85 +182,98 @@ export const TransactionsList = memo(() => {
             </span>
           </div>
 
-          <div className="flex flex-col divide-y divide-gray-300">
-            {displayedTransactions.length === 0 ? (
-              <div className="py-8 text-center text-gray-500">
-                Nenhuma transação encontrada
-              </div>
-            ) : (
-              displayedTransactions.map((tx) => (
-                <div
-                  key={tx.id}
-                  className="flex justify-between items-center py-4 hover:bg-gray-50 transition-colors"
-                >
-                  <div className="flex flex-col flex-1">
-                    <span className="text-sm font-medium text-gray-900">
-                      {tx.description}
-                    </span>
-                    <div className="flex items-center gap-4 mt-1">
-                      <span className="text-xs text-gray-500">{tx.date}</span>
+          {displayedTransactions.length === 0 ? (
+            <div className="py-8 text-center text-gray-500">
+              Nenhuma transação encontrada
+            </div>
+          ) : (
+            <>
+              <div className="hidden md:flex flex-col divide-y divide-gray-300">
+                {displayedTransactions.map((tx) => (
+                  <div
+                    key={tx.id}
+                    className="flex justify-between items-center py-4 hover:bg-gray-50 transition-colors"
+                  >
+                    <div className="flex flex-col flex-1">
+                      <span className="text-sm font-medium text-gray-900">
+                        {tx.description}
+                      </span>
+                      <div className="flex items-center gap-4 mt-1">
+                        <span className="text-xs text-gray-500">{tx.date}</span>
+                        <span
+                          className={`text-xs font-medium ${
+                            tx.type === "credit"
+                              ? "text-green-600"
+                              : "text-red-600"
+                          }`}
+                        >
+                          {tx.type === "credit" ? "Receita" : "Despesa"}
+                        </span>
+                        {tx.category && (
+                          <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
+                            {CATEGORY_LABELS[tx.category]}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-4">
                       <span
-                        className={`text-xs font-medium ${
+                        className={`text-lg font-semibold mr-4 ${
                           tx.type === "credit"
                             ? "text-green-600"
                             : "text-red-600"
                         }`}
                       >
-                        {tx.type === "credit" ? "Receita" : "Despesa"}
+                        {tx.type === "credit" ? "+" : "-"} R${" "}
+                        {Math.abs(tx.amount).toFixed(2)}
                       </span>
-                      {tx.category && (
-                        <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
-                          {CATEGORY_LABELS[tx.category]}
-                        </span>
-                      )}
+
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => handleView(tx)}
+                          className="p-2 text-cyan-600 hover:bg-cyan-50 rounded-lg transition-colors"
+                          title="Visualizar detalhes"
+                          aria-label="Visualizar detalhes"
+                        >
+                          <FaEye size={16} />
+                        </button>
+                        <button
+                          onClick={() => handleEdit(tx)}
+                          className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                          title="Editar transação"
+                          aria-label="Editar transação"
+                        >
+                          <FaEdit size={16} />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(tx)}
+                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                          title="Deletar transação"
+                          aria-label="Deletar transação"
+                        >
+                          <FaTrash size={16} />
+                        </button>
+                      </div>
                     </div>
                   </div>
+                ))}
+              </div>
 
-                  <div className="flex items-center gap-4">
-                    <span
-                      className={`text-lg font-semibold mr-4 ${
-                        tx.type === "credit"
-                          ? "text-green-600"
-                          : "text-red-600"
-                      }`}
-                    >
-                      {tx.type === "credit" ? "+" : "-"} R${" "}
-                      {Math.abs(tx.amount).toFixed(2)}
-                    </span>
+              <div className="md:hidden flex flex-col gap-3">
+                {displayedTransactions.map((tx) => (
+                  <TransactionCard
+                    key={tx.id}
+                    transaction={tx}
+                    onView={handleView}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                  />
+                ))}
+              </div>
+            </>
+          )}
 
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => handleView(tx)}
-                        className="p-2 text-cyan-600 hover:bg-cyan-50 rounded-lg transition-colors"
-                        title="Visualizar detalhes"
-                        aria-label="Visualizar detalhes"
-                      >
-                        <FaEye size={16} />
-                      </button>
-                      <button
-                        onClick={() => handleEdit(tx)}
-                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                        title="Editar transação"
-                        aria-label="Editar transação"
-                      >
-                        <FaEdit size={16} />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(tx)}
-                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                        title="Deletar transação"
-                        aria-label="Deletar transação"
-                      >
-                        <FaTrash size={16} />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-
-          {/* Scroll infinito trigger */}
           {currentPage < totalPages && (
             <div ref={observerTarget} className="py-4 text-center text-gray-500">
               Carregando mais transações...
