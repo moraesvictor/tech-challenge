@@ -28,6 +28,35 @@ Acesse: http://localhost:3000
 
 ## 📋 Documentos Disponíveis
 
+### [apresentacao.md](./apresentacao.md) ⭐ **NOVO**
+Apresentação completa do projeto focada na documentação do Tech Challenge:
+- Visão geral do projeto
+- Todos os requisitos implementados
+- Arquitetura de microfrontends detalhada
+- Autenticação e autorização explicada
+- Docker e containerização
+- Deploy em cloud (Vercel)
+- Design System e gestão de estado
+- Checklist completo de implementação
+
+### [guia-video.md](./guia-video.md) ⭐ **NOVO**
+Guia passo a passo para criação do vídeo demonstrativo:
+- Roteiro detalhado (15-20 minutos)
+- Checklist de preparação
+- O que mostrar em cada seção
+- O que falar em cada parte
+- Dicas técnicas de gravação
+- Dicas de apresentação
+- Checklist final antes de enviar
+
+### [explicacoes-tecnicas.md](./explicacoes-tecnicas.md) ⭐ **NOVO**
+Guia rápido com explicações objetivas sobre:
+- Como explicar autenticação e autorização (passo a passo)
+- Como explicar arquitetura de microfrontends (passo a passo)
+- Código para mostrar em cada seção
+- Pontos-chave para destacar
+- Dicas para apresentação
+
 ### [docker.md](./docker.md)
 Guia completo sobre:
 - Instalação e pré-requisitos
