@@ -44,7 +44,6 @@ export const EditTransactionModal = ({
   const [descriptionError, setDescriptionError] = useState<string>("");
   const [amountError, setAmountError] = useState<string>("");
 
-  // Sugestão automática de categoria baseada na descrição
   useEffect(() => {
     if (description.trim()) {
       const suggestedCategory = getCategoryFromDescription(description);
@@ -57,7 +56,6 @@ export const EditTransactionModal = ({
     }
   }, [description, type, category]);
 
-  // Validação em tempo real
   useEffect(() => {
     if (description.trim().length < 3) {
       setDescriptionError("A descrição deve ter pelo menos 3 caracteres");
@@ -89,7 +87,6 @@ export const EditTransactionModal = ({
     e.preventDefault();
 
     try {
-      // Validação avançada
       if (!description.trim()) {
         throw new Error(ERROR_MESSAGES.DESCRIPTION_REQUIRED);
       }
@@ -109,7 +106,6 @@ export const EditTransactionModal = ({
       const formattedDate = dateUtils.fromInputDate(date);
       const amountValue = amount / 100;
 
-      // Sugestão automática de categoria se não houver
       let finalCategory = category;
       if (!finalCategory && description.trim()) {
         const suggestedCategory = getCategoryFromDescription(description);

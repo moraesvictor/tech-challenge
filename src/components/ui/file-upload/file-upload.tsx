@@ -30,13 +30,11 @@ export const FileUpload = ({
   const handleFileSelect = (selectedFile: File) => {
     setError("");
 
-    // Validar tamanho
     if (selectedFile.size > maxSize * 1024 * 1024) {
       setError(`O arquivo deve ter no máximo ${maxSize}MB`);
       return;
     }
 
-    // Validar tipo
     const validTypes = accept.split(",").map((t) => t.trim());
     const fileExtension = selectedFile.name.split(".").pop()?.toLowerCase();
     const isValidType =
@@ -58,7 +56,6 @@ export const FileUpload = ({
 
     setFile(selectedFile);
 
-    // Criar preview para imagens
     if (selectedFile.type.startsWith("image/")) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -68,7 +65,6 @@ export const FileUpload = ({
       };
       reader.readAsDataURL(selectedFile);
     } else {
-      // Para PDFs e outros, criar uma URL temporária
       const url = URL.createObjectURL(selectedFile);
       setPreview(url);
       onChange?.(selectedFile, url);
@@ -131,7 +127,6 @@ export const FileUpload = ({
               </button>
             </div>
             {file?.type.startsWith("image/") && (
-              // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={preview}
                 alt="Preview"

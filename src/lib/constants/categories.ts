@@ -37,46 +37,37 @@ export const CATEGORY_LABELS: Record<TransactionCategory, string> = {
 };
 
 export const CATEGORY_SUGGESTIONS: Record<string, TransactionCategory> = {
-  // Alimentação
   restaurante: "alimentacao",
   lanche: "alimentacao",
   supermercado: "alimentacao",
   padaria: "alimentacao",
   delivery: "alimentacao",
   comida: "alimentacao",
-  // Transporte
   uber: "transporte",
   taxi: "transporte",
   onibus: "transporte",
   metro: "transporte",
   combustivel: "transporte",
   estacionamento: "transporte",
-  // Moradia
   aluguel: "moradia",
   condominio: "moradia",
   agua: "moradia",
   luz: "moradia",
   internet: "moradia",
   telefone: "moradia",
-  // Saúde
   farmacia: "saude",
   medico: "saude",
   hospital: "saude",
   plano: "saude",
-  // Educação
   escola: "educacao",
   curso: "educacao",
   livro: "educacao",
-  // Lazer
   cinema: "lazer",
   viagem: "lazer",
   passeio: "lazer",
-  // Compras
   compra: "compras",
   loja: "compras",
-  // Serviços
   servico: "servicos",
-  // Receitas
   salario: "salario",
   deposito: "salario",
   investimento: "investimentos",
