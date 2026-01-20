@@ -1,7 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: "standalone",
+
+  ...(process.env.VERCEL ? {} : { output: "standalone" }),
+  
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "cdn.jsdelivr.net" },
@@ -10,6 +12,8 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "avatars.githubusercontent.com" },
     ],
   },
+  compress: true,
+  poweredByHeader: false,
 };
 
 export default nextConfig;
