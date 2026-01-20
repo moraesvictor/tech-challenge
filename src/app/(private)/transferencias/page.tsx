@@ -1,4 +1,4 @@
-import { TransfersContainer } from "@/modules/transfers/transfers-container";
+import { TransfersMicrofrontend } from "@/components/microfrontends/transfers-microfrontend";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -9,5 +9,5 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default function TransfersPage() {
-  return <TransfersContainer />;
+  return <TransfersMicrofrontend />;
 }

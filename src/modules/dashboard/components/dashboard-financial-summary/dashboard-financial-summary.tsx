@@ -106,7 +106,6 @@ export const DashboardFinancialSummary = () => {
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {/* Receitas */}
           <div className="flex flex-col gap-2 p-4 bg-green-50 rounded-lg">
             <div className="flex items-center justify-between">
               <span className="text-sm text-gray-600">Receitas</span>
@@ -120,7 +119,6 @@ export const DashboardFinancialSummary = () => {
             </p>
           </div>
 
-          {/* Despesas */}
           <div className="flex flex-col gap-2 p-4 bg-red-50 rounded-lg">
             <div className="flex items-center justify-between">
               <span className="text-sm text-gray-600">Despesas</span>
@@ -134,7 +132,6 @@ export const DashboardFinancialSummary = () => {
             </p>
           </div>
 
-          {/* Economia */}
           <div
             className={`flex flex-col gap-2 p-4 rounded-lg ${
               summary.savings >= 0 ? "bg-cyan-50" : "bg-orange-50"

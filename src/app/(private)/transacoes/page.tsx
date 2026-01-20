@@ -1,4 +1,4 @@
-import { TransactionsContainer } from "@/modules/transactions/transactions-container";
+import { TransactionsMicrofrontend } from "@/components/microfrontends/transactions-microfrontend";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -9,6 +9,6 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default function TransactionsPage() {
-  return <TransactionsContainer />;
+  return <TransactionsMicrofrontend />;
 }
 

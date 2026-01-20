@@ -16,6 +16,61 @@ const nextConfig: NextConfig = {
   compress: true,
   poweredByHeader: false,
   
+  webpack: (config, { isServer, webpack }) => {
+    if (!isServer && process.env.ENABLE_MODULE_FEDERATION === 'true') {
+      try {
+        const ModuleFederationPlugin = require('@module-federation/enhanced')?.ModuleFederationPlugin;
+        
+        if (ModuleFederationPlugin) {
+          config.plugins.push(
+            new ModuleFederationPlugin({
+              name: 'shell',
+              filename: 'static/chunks/remoteEntry.js',
+              remotes: {
+                dashboard: process.env.NEXT_PUBLIC_DASHBOARD_REMOTE || 'dashboard@http://localhost:3001/_next/static/chunks/remoteEntry.js',
+                transactions: process.env.NEXT_PUBLIC_TRANSACTIONS_REMOTE || 'transactions@http://localhost:3002/_next/static/chunks/remoteEntry.js',
+                transfers: process.env.NEXT_PUBLIC_TRANSFERS_REMOTE || 'transfers@http://localhost:3003/_next/static/chunks/remoteEntry.js',
+                investments: process.env.NEXT_PUBLIC_INVESTMENTS_REMOTE || 'investments@http://localhost:3004/_next/static/chunks/remoteEntry.js',
+              },
+              exposes: {
+                './DashboardContainer': './src/modules/dashboard/dashboard-container',
+                './TransactionsContainer': './src/modules/transactions/transactions-container',
+                './TransfersContainer': './src/modules/transfers/transfers-container',
+                './InvestmentsContainer': './src/modules/investments/investmets-container',
+              },
+              shared: {
+                react: {
+                  singleton: true,
+                  requiredVersion: '^19.1.0',
+                  eager: false,
+                },
+                'react-dom': {
+                  singleton: true,
+                  requiredVersion: '^19.1.0',
+                  eager: false,
+                },
+                'next': {
+                  singleton: true,
+                  eager: false,
+                },
+                'recoil': {
+                  singleton: true,
+                  eager: false,
+                },
+              },
+            })
+          );
+        }
+      } catch (error) {
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('Module Federation plugin not available, using fallback:', error);
+        }
+      }
+    }
+    
+    return config;
+  },
+  
   async headers() {
     return [
       {

@@ -35,7 +35,6 @@ export const TransactionsFilters = ({
   const filteredTransactions = useMemo(() => {
     let filtered = [...transactions];
 
-    // Filtro de busca (descrição)
     if (filters.search.trim()) {
       const searchLower = filters.search.toLowerCase();
       filtered = filtered.filter((tx) =>
@@ -43,17 +42,14 @@ export const TransactionsFilters = ({
       );
     }
 
-    // Filtro de tipo
     if (filters.type !== "all") {
       filtered = filtered.filter((tx) => tx.type === filters.type);
     }
 
-    // Filtro de categoria
     if (filters.category !== "all") {
       filtered = filtered.filter((tx) => tx.category === filters.category);
     }
 
-    // Filtro de data (de)
     if (filters.dateFrom) {
       const fromDate = new Date(filters.dateFrom);
       filtered = filtered.filter((tx) => {
@@ -62,7 +58,6 @@ export const TransactionsFilters = ({
       });
     }
 
-    // Filtro de data (até)
     if (filters.dateTo) {
       const toDate = new Date(filters.dateTo);
       toDate.setHours(23, 59, 59, 999);
@@ -72,7 +67,6 @@ export const TransactionsFilters = ({
       });
     }
 
-    // Ordenar por data (mais recente primeiro)
     filtered.sort((a, b) => {
       const dateA = new Date(a.date.split("/").reverse().join("-"));
       const dateB = new Date(b.date.split("/").reverse().join("-"));

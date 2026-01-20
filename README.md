@@ -84,9 +84,15 @@ Sistema de gerenciamento financeiro desenvolvido como projeto final da fase util
 ### Tecnologias Obrigatórias
 
 #### ✅ Next.js
-- Projeto configurado e organizado utilizando Next.js 15.5.3
+- Projeto configurado e organizado utilizando Next.js 16.1.4
 - App Router com estrutura modular
 - Otimizações de performance e SEO
+
+#### ✅ Microfrontends
+- **Module Federation** implementado com `@module-federation/enhanced`
+- Cada módulo pode funcionar como microfrontend independente
+- Carregamento dinâmico de remotes com fallback automático
+- Preparado para separação em repositórios diferentes
 
 #### ✅ Design System
 - Sistema de componentes reutilizáveis e consistentes

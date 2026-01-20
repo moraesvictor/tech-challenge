@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint"
   },
@@ -20,6 +20,8 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@module-federation/enhanced": "^0.22.1",
+    "@module-federation/runtime": "^0.22.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
